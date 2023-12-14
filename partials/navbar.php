@@ -17,7 +17,6 @@
 						<ul>
 							<li><a href="./index.php">Home</a></li>
 							<li><a href="all-bread.php">Bread's</a></li>
-							<li><a href="contact.html">Contact</a></li>
 							<li>
 								<div class="header-icons">
 									<a class="shopping-cart" href="profile.php"><i class="fas fa-user"></i></a>

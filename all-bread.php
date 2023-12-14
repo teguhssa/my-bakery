@@ -4,8 +4,24 @@ include_once('config/index.php');
 // import helper function
 include_once('helper/index.php');
 
-// fetching data dari database
-$sql = "SELECT * FROM `bakeries` WHERE is_deleted = 0 ORDER BY created_at DESC";
+// jumlah per halaman
+$items_per_page = 10;
+
+// mendapatkan jumlah total data dari databse
+$total_item_query = "SELECT COUNT(*) AS total FROM bakeries WHERE is_deleted = 0";
+$total_item_result = mysqli_query($conn, $total_item_query);
+$total_items = mysqli_fetch_assoc($total_item_result)['total'];
+
+// mennghitung jumlah halaman
+$total_pages = ceil($total_items / $items_per_page);
+// mendapatkan halaman saat ini
+$current_page = isset($_GET['page']) ? $_GET['page'] : 1;
+
+// menghitung offset
+$offset = ($current_page - 1) * $items_per_page;
+
+// data dengan batas halaman
+$sql = "SELECT * FROM `bakeries` WHERE is_deleted = 0 ORDER BY created_at DESC LIMIT $offset, $items_per_page";
 $result = mysqli_query($conn, $sql);
 
 ?>
@@ -92,10 +108,10 @@ $result = mysqli_query($conn, $sql);
                         <div class="col-lg-4 col-md-6 text-center">
                             <div class="single-product-item">
                                 <div class="product-image">
-                                    <a href="bread.php?id='. $data['id'] .'"><img src="assets/upload/' . $data['bakery_img'] . '" alt="product thumbnail"></a>
+                                    <a href="bread.php?id=' . $data['id'] . '"><img src="assets/upload/' . $data['bakery_img'] . '" alt="product thumbnail"></a>
                                 </div>
                                 <h3>' . $data['bakery_name'] . '</h3>
-                                <p>'.$data['description'].'</p>
+                                <p>' . $data['description'] . '</p>
                                 <p class="product-price">' . rupiah($data['price']) . '</p>
                             </div>
                         </div>
@@ -108,11 +124,12 @@ $result = mysqli_query($conn, $sql);
                 <div class="col-lg-12 text-center">
                     <div class="pagination-wrap">
                         <ul>
-                            <li><a href="#">Prev</a></li>
-                            <li><a href="#">1</a></li>
-                            <li><a class="active" href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">Next</a></li>
+                            <?php
+                            for ($page = 1; $page <= $total_pages; $page++) {
+                                echo '<li><a ' . ($page == $current_page ? 'class="active text-white"' : '') . ' href="?page=' . $page . '">' . $page . '</a></li>';
+                            }
+
+                            ?>
                         </ul>
                     </div>
                 </div>

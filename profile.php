@@ -36,11 +36,10 @@ JOIN order_detail ON orders.id = order_detail.order_id
 JOIN bakeries ON order_detail.bakery_id = bakeries.id
 JOIN user_addresses ON orders.address_id = user_addresses.id
 WHERE orders.user_id = '$user_id'
-GROUP BY orders.id, orders.user_id, orders.status_order, orders.created_at;";
+GROUP BY orders.id, orders.user_id, orders.status_order, orders.created_at
+ORDER BY orders.created_at DESC";
 $res = mysqli_query($conn, $qOrder);
 
-// menyimpan order id
-$order_id;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -215,13 +214,13 @@ $order_id;
                             </div>
                         </div>
                         <!-- end tab address -->
+                        <!-- tab order -->
                         <div class="tab-pane fade" id="purchase-tab-pane" role="tabpanel" aria-labelledby="purchase-tab" tabindex="0">
                             <div class="row justify-content-center align-items-center">
                                 <div class="col-lg-8 col-md-12">
                                     <?php
                                     if ($res->num_rows > 0) {
                                         while ($dataOrder = mysqli_fetch_assoc($res)) {
-                                            $order_id = $dataOrder['order_id'];
                                             $orderDate = date("d F Y", strtotime($dataOrder['created_at']));
                                             echo '
                                                 <div class="card my-4">
@@ -240,7 +239,7 @@ $order_id;
                                                             <p class="m-0 total-amount">' . rupiah($dataOrder['total_price']) . '</p>
                                                         </div>
                                                         <div class="d-flex justify-content-end gap-3">
-                                                            <button class="btnPostReceipt" data-bs-toggle="modal" data-bs-target="#modalDetailOrder">Detail Order</button>
+                                                            <button class="btnPostReceipt" data-order-id=' . $dataOrder['order_id'] . ' id="btnDetail" data-bs-toggle="modal" data-bs-target="#modalDetailOrder">Detail Order</button>
                                                         </div>
                                                     </div>
                                                 </div>';
@@ -273,9 +272,10 @@ $order_id;
 
     <?php include('partials/modal/AddAddress.php') ?>
 
+    <?php include('partials/modal/DetailOrder.php') ?>
+
     <?php include('partials/modal/EditAddress.php') ?>
 
-    <?php include('partials/modal/DetailOrder.php') ?>
 
     <!-- footer -->
     <?php include('partials/footer.php') ?>
@@ -297,9 +297,55 @@ $order_id;
     <script src="assets/user/js/sticker.js"></script>
     <!-- main js -->
     <script src="assets/user/js/main.js"></script>
+    <!-- helper -->
+    <script src="helper/index.js"></script>
 
     <script>
         $(document).ready(function() {
+
+            // mengirim order_id untuk detail order
+            $(".btnPostReceipt").on("click", function() {
+                const order_id = $(this).data('order-id')
+
+                $.ajax({
+                    url: "action/order/detail.php",
+                    data: {
+                        action: "orderDetail",
+                        order_id: order_id
+                    },
+                    method: "post",
+                    dataType: "json",
+                    success: function(res) {
+                        if (res.status) {
+                            let {
+                                data
+                            } = res
+
+                            $("#order-date").text(res.date_order)
+                            // buat element untuk ditampilkan
+                            const detailElement = data.map((item, index) => (
+                                ` <div class="card-body">
+                                    <div class="address-info d-flex align-items-center gap-2 mb-3">
+                                        <div class="d-flex flex-grow-1">
+                                            <img src="assets/upload/${item.bakery_img}" alt="bread" width="100" />
+                                            <div class="d-flex flex-column" style="margin-left: 20px;">
+                                                <p class="m-0 fw-bold">${item.bakery_name}</p>
+                                                <p class="m-0">x ${item.qty}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        <p class="fw-bold" style="margin-bottom: 0; margin-right: 20px;">Total Price</p>
+                                        <p class="m-0 total-amount">${rupiah(item.subtotal)}</p>
+                                    </div>
+                                </div>`
+                            ))
+
+                            $("#order-detail-wrapper").html(detailElement)
+                        }
+                    }
+                })
+            })
 
             // Pilih elemen dengan ID btnFetchAlamat
             $("#btnFetchAlamat").on("click", function() {
