@@ -1,0 +1,49 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.4rem 7%;
+  background-color: transparent;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+
+  font-family: "Poppins";
+}
+
+.navbar-logo {
+  color: #fff;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.navbar-nav a {
+  font-weight: 700;
+  color: #fff;
+  transition: 0.3s;
+  display: inline-block;
+  margin: 0 1rem;
+}
+
+.navbar-nav a:hover {
+  color: $primary-color;
+}
+
+
+.navbar-extra a {
+    margin: 0 0.5rem;
+    color: #fff;
+}
+
+#hamburger {
+    display: none;
+}

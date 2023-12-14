@@ -1,0 +1,23 @@
+/* form tambah roti */
+
+.thumbnail {
+    width: 100%;
+    max-height: 200px;
+    margin-top: 1rem;
+}
+
+.thumbnail img {
+    max-height: 200px;
+    object-fit: contain;
+}
+
+/* end form tambah roti */
+
+/* tabel pesanan */
+.btnDetail {
+    background: none;
+    border: none;
+    color: #F28123;
+}
+
+/* tabel pesanan */
