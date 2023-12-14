@@ -23,7 +23,7 @@ if (isset($_POST['btnLogin'])) {
         $row = mysqli_fetch_assoc($result);
         // menyimpan data user kedalam session
         $_SESSION['user_id_admin'] = $row['id'];
-        $_SESSION['username'] = $row['username'];
+        $_SESSION['username_admin'] = $row['username'];
         $_SESSION['flash_msg'] = $row['username'];
         // redirect kehalaman selanjutnya
         header('Location: ../index.php');
@@ -38,6 +38,9 @@ if (isset($_POST['btnLogin'])) {
 // action logout
 if (isset($_POST['btnLogout'])) {
     // unset($_SESSION['username']);
-    session_destroy();
+    // session_destroy();
+    unset($_SESSION['user_id_admin']);
+    unset($_SESSION['username_admin']);
+    unset($_SESSION['flash_msg']);
     header("Location: ../login.php");
 }

@@ -12,7 +12,7 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-bread-slice"></i></div>
                     Roti
                 </a>
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="./user.php">
                     <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                     User
                 </a>
@@ -21,15 +21,11 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                     Pesanan
                 </a>
-                <a class="nav-link" href="#">
-                    <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
-                    Info
-                </a>
             </div>
         </div>
         <div class="sb-sidenav-footer">
             <div class="small">Logged in as:</div>
-            <p class="text-white fw-bold mb-0"><?php echo $_SESSION['username'] ?></p>
+            <p class="text-white fw-bold mb-0"><?php echo $_SESSION['username_admin'] ?></p>
         </div>
     </nav>
 </div>
