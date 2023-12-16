@@ -152,10 +152,10 @@ $result = mysqli_query($conn, $sql);
 	<!-- advertisement section -->
 	<div class="abt-section mb-150">
 		<div class="container">
-			<div class="row">
+			<div class="row align-items-center">
 				<div class="col-lg-6 col-md-12">
 					<div class="abt-bg">
-						<a href="https://www.youtube.com/watch?v=DBLlFWYcIGQ" class="video-play-btn popup-youtube"><i class="fas fa-play"></i></a>
+						<img src="assets/user/img/bg-about.jpg" class="w-fluid" />
 					</div>
 				</div>
 				<div class="col-lg-6 col-md-12">
