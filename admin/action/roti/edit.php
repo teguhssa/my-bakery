@@ -59,7 +59,7 @@ if (isset($_POST['btnUpdateRoti'])) {
         $locationDir = $uploadDir . $newName;
 
         if ($status) {
-            $sql = "UPDATE bakeries SET bakery_name = '$nama_roti', bakery_img = '$newName', description  = '$deskripsi', price = '$harga_roti' modified_at = '$modifiedAt' WHERE id = '$id' ";
+            $sql = "UPDATE bakeries SET bakery_name = '$nama_roti', bakery_img = '$newName', description  = '$deskripsi', price = '$harga_roti', modified_at = '$modifiedAt' WHERE id = '$id' ";
             $result = mysqli_query($conn, $sql);
             if ($result) {
                 if (move_uploaded_file($_FILES['gambar_roti']['tmp_name'], $locationDir)) {
