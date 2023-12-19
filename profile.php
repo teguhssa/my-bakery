@@ -348,7 +348,7 @@ $res = mysqli_query($conn, $qOrder);
             })
 
             // Pilih elemen dengan ID btnFetchAlamat
-            $("#btnFetchAlamat").on("click", function() {
+            $(".btnEditAddress").on("click", function() {
                 const id = $(this).val()
 
                 $.ajax({
