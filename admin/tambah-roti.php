@@ -70,6 +70,10 @@ if (!isset($_SESSION['user_id_admin'])) {
                                     <input type="number" name="harga_roti" id="harga_roti" class="form-control" placeholder="Harga Roti..." required>
                                 </div>
                                 <div class="mb-3">
+                                    <label for="stock" class="form-label">Stock Roti</label>
+                                    <input type="number" name="stock" id="stock" class="form-control" placeholder="Stock Roti..." oninput="this.value = Math.abs(this.value)" min="1" required>
+                                </div>
+                                <div class="mb-3">
                                     <label for="deskripsi" class="form-label">Deskripsi</label>
                                     <textarea class="form-control" name="deskripsi" id="deskripsi" rows="3" placeholder="Deskripsi.." required></textarea>
                                 </div>

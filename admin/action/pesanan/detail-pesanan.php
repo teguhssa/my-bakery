@@ -20,6 +20,7 @@ if ($_POST['action'] === "btnDetail") {
         user_addresses.city,
         user_addresses.postal_code,
         user_addresses.phone_number,
+        users.name,
         users.username,
         GROUP_CONCAT(bakeries.bakery_name) AS bakery_names,
         GROUP_CONCAT(order_detail.qty) AS total_qty,

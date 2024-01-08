@@ -8,9 +8,9 @@ if (!isset($_SESSION['user_id_admin'])) {
     exit();
 }
 // menampilkan semua pesanan
-$qPesanan = "SELECT orders.id AS order_id, users.username, orders.status_order, orders.created_at
+$qPesanan = "SELECT orders.id AS order_id, users.name, users.username, orders.status_order, orders.created_at
 FROM orders
-JOIN users ON users.id = orders.user_id;";
+JOIN users ON users.id = orders.user_id ORDER BY orders.created_at DESC";
 $res = mysqli_query($conn, $qPesanan);
 
 ?>
@@ -55,6 +55,7 @@ $res = mysqli_query($conn, $qPesanan);
                             <table id="tabelPesanan">
                                 <thead>
                                     <tr>
+                                        <th>Nama</th>
                                         <th>Username</th>
                                         <th>Status Order</th>
                                         <th>Waktu order</th>
@@ -67,6 +68,7 @@ $res = mysqli_query($conn, $qPesanan);
                                     while ($row = mysqli_fetch_assoc($res)) {
                                         $orderDate = date("d F Y", strtotime($row['created_at']));
                                         echo "<tr>";
+                                        echo "<td>" . $row['name'] . "</td>";
                                         echo "<td>" . $row['username'] . "</td>";
                                         echo "<td><div class='badge bg-success'>" . $row['status_order'] . "</div></td>";
                                         echo "<td>" . $orderDate . "</td>";
@@ -74,7 +76,7 @@ $res = mysqli_query($conn, $qPesanan);
                                         echo "<td>
                                                 <select class='form-select pilih-status' id='pilih-status'>
                                                     <option selected>Pilih status</option>
-                                                    <option value='cancel' data-order-id='" . $row['order_id'] . "' >Cancel</option>
+                                                    <option value='cancel' data-order-id='" . $row['order_id'] . "'>Cancel</option>
                                                     <option value='shipping' data-order-id='" . $row['order_id'] . "'>Dalam perjalanan</option>
                                                     <option value='done' data-order-id='" . $row['order_id'] . "'>Selesai</option>
                                                 </select>
@@ -118,10 +120,10 @@ $res = mysqli_query($conn, $qPesanan);
                             data
                         } = res
 
-                        console.log(data)
                         if (res.status) {
                             $("#info-nama-produk").text(data.bakery_names)
                             $("#info-qty").text(data.total_qty)
+                            $("#info-nama").text(data.name)
                             $("#info-username").text(data.username)
                             $("#info-alamat").text(data.full_address)
                             $("#info-kota").text(data.city)
@@ -129,7 +131,6 @@ $res = mysqli_query($conn, $qPesanan);
                             $("#info-nomor-hp").text(data.phone_number)
                             $("#info-tanggal-pesan").text(data.created_at)
                             $("#info-total").text(data.total_price)
-
                         }
                     }
                 })

@@ -49,6 +49,10 @@ if (isset($_SESSION['user_id'])) {
                     <div class="form-auth">
                         <form action="action/auth/register.php" method="post">
                             <div class="mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="name" name="name" id="name" class="form-control" placeholder="Your name here..." required>
+                            </div>
+                            <div class="mb-3">
                                 <label for="username" class="form-label">Username</label>
                                 <input type="username" name="username" id="username" class="form-control" placeholder="Your username here..." required>
                             </div>

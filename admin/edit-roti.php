@@ -23,6 +23,7 @@ while($row = mysqli_fetch_assoc($result)) {
     $gambar_roti = $row['bakery_img'];
     $deskripsi = $row['description'];
     $harga_roti = $row['price'];
+    $stock = $row['stock'];
 }
 
 ?>
@@ -85,6 +86,10 @@ while($row = mysqli_fetch_assoc($result)) {
                                 <div class="mb-3">
                                     <label for="harga_roti" class="form-label">Harga Roti</label>
                                     <input type="number" name="harga_roti" id="harga_roti" class="form-control" placeholder="Harga Roti..." value="<?php echo $harga_roti ?>" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="stock" class="form-label">Stock Roti</label>
+                                    <input type="number" name="stock" id="stock" class="form-control" placeholder="Stock Roti..." value="<?php echo $stock ?>" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="deskripsi" class="form-label">Deskripsi</label>

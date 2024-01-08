@@ -69,6 +69,7 @@ if (!isset($_SESSION['user_id_admin'])) {
                                         <th>Gambar</th>
                                         <th>Desktripsi</th>
                                         <th>Harga</th>
+                                        <th>Stock</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -86,6 +87,7 @@ if (!isset($_SESSION['user_id_admin'])) {
                                         </td>";
                                         echo "<td>" . $row['description'] . "</td>";
                                         echo "<td>" . $row['price'] . "</td>";
+                                        echo "<td>" . $row['stock'] . "</td>";
                                         echo "<td> <a href='edit-roti.php?id=". $row['id'] ."' class='btn'><i class='fas fa-edit'  style='color: #fde808;'></i></a> | <a href='action/roti/hapus.php?id=" . $row['id'] . "' class='btn' onclick='return confirmHapus()'><i class='fas fa-trash' style='color: #ff0000;'></i></a> </td>";
                                         echo "</tr>";
                                     }
@@ -99,42 +101,6 @@ if (!isset($_SESSION['user_id_admin'])) {
             </main>
             <!-- footer -->
             <?php include('partials/footer.php') ?>
-        </div>
-    </div>
-
-    <!-- modal tamabh roti -->
-    <div class="modal fade" id="modalAddRoti" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Tambah Roti</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="action/roti/tambah.php" method="post" id="formTambahRoti" enctype="multipart/form-data">
-                        <div class="mb-3">
-                            <label for="nama_roti" class="form-label">Nama Roti</label>
-                            <input type="text" name="nama_roti" id="nama_roti" class="form-control" placeholder="Nama Roti..." required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="harga_roti" class="form-label">Harga Roti</label>
-                            <input type="number" name="harga_roti" id="harga_roti" class="form-control" placeholder="Harga Roti..." required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="deskripsi" class="form-label">Deskripsi</label>
-                            <textarea class="form-control" name="deskripsi" id="deskripsi" rows="3" placeholder="Deskripsi.." required></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="gambar_roti">Gambar Roti</label>
-                            <input type="file" name="gambar_roti" id="gambar_roti" class="form-control" required>
-                            <div class="thumbnail d-none" id="wrapper_thumbnail">
-                                <img alt="thumbnail" name="thumbnail" id="thumbnail">
-                            </div>
-                        </div>
-                        <button class="btn btn-primary w-100" name="btnTambahRoti" type="submit">Simpan</button>
-                    </form>
-                </div>
-            </div>
         </div>
     </div>
 

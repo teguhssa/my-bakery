@@ -103,19 +103,30 @@ $result = mysqli_query($conn, $sql);
 
             <div class="row product-lists">
                 <?php
-                while ($data = mysqli_fetch_assoc($result)) {
-                    echo '
-                        <div class="col-lg-4 col-md-6 text-center">
-                            <div class="single-product-item">
-                                <div class="product-image">
-                                    <a href="bread.php?id=' . $data['id'] . '"><img src="assets/upload/' . $data['bakery_img'] . '" alt="product thumbnail"></a>
+                $row_count = mysqli_num_rows($result);
+
+                if ($row_count > 0) {
+                    while ($data = mysqli_fetch_assoc($result)) {
+                        echo '
+                            <div class="col-lg-4 col-md-6 text-center">
+                                <div class="single-product-item">
+                                    <div class="product-image">
+                                        <a href="bread.php?id=' . $data['id'] . '"><img src="assets/upload/' . $data['bakery_img'] . '" alt="product thumbnail"></a>
+                                    </div>
+                                    <div class="' . ($data['stock'] == 0 ? 'out-of-stock' : '') . '"></div>
+                                    <h3>' . $data['bakery_name'] . '</h3>
+                                    <p>' . $data['description'] . '</p>
+                                    <p class="product-price">' . rupiah($data['price']) . '</p>
                                 </div>
-                                <h3>' . $data['bakery_name'] . '</h3>
-                                <p>' . $data['description'] . '</p>
-                                <p class="product-price">' . rupiah($data['price']) . '</p>
                             </div>
-                        </div>
-                        ';
+                            ';
+                    }
+                } else {
+                    echo '
+                    <div class="text-center">
+                        <h4>Tidak ada Roti yang tersedia</h4>
+                    </div>
+                    ';
                 }
                 ?>
             </div>

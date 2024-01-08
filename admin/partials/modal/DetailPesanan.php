@@ -15,6 +15,7 @@
                         </div>
                         <div class="mb-3">
                             <h5>Info Customer</h5>
+                            <p class="mb-0">Nama : <span class="fw-bold" id="info-nama"></span></p>
                             <p class="mb-0">Username : <span class="fw-bold" id="info-username"></span></p>
                             <p class="mb-0">Alamat : <span class="fw-bold"  id="info-alamat"></span></p>
                             <p class="mb-0">Kota : <span class="fw-bold" id="info-kota"></span></p>

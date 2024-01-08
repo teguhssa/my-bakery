@@ -16,6 +16,13 @@ if (isset($_POST['addCart'])) {
     // menjumlahkan harga dengan kuantitas
     $total_price = (int)$qty * $price;
 
+    $qStockBakery = mysqli_query($conn, "SELECT stock FROM bakeries WHERE id = '$bakery_id' ");
+    $stockBakery = mysqli_fetch_assoc($qStockBakery);
+
+    if ($qty > $stockBakery['stock']) {
+        echo '<script>alert("Not enough stock available.!"); window.location.href="../../bread.php?id=' . $bakery_id . '";</script>';
+        die;
+    }
 
     if ($user_id !==  null) {
         $bakeryIdExist = "SELECT * FROM carts WHERE bakery_id = '$bakery_id' AND user_id = '$user_id' AND is_complete = 0 AND is_deleted = 0 LIMIT 1 ";

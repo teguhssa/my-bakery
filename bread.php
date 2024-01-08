@@ -91,6 +91,7 @@ $data = mysqli_fetch_assoc($result);
                     <div class="single-product-content">
                         <h3><?php echo $data['bakery_name'] ?></h3>
                         <p class="single-product-pricing"><?php echo rupiah($data['price']) ?></p>
+                        <p class="mb-0">Sisa Stock : <?php echo '<span class="fw-bold">'.$data['stock'].'</span>' ?></p>
                         <p><?php echo $data['description'] ?></p>
                         <div class="single-product-form">
                             <form action="action/cart/add.php" method="post">

@@ -14,13 +14,14 @@ if (isset($_POST['btnTambahRoti'])) {
     $nama_roti = $_POST['nama_roti'];
     $harga_roti = $_POST['harga_roti'];
     $deskripsi = $_POST['deskripsi'];
+    $stock = $_POST['stock'];
     $gambar = $_FILES['gambar_roti']['name'];
     $createdAt = date('Y-m-d H:i:s');
     $maxSize = 204800;
     $status = false;
 
     // validasi semua input tidak kosong
-    if ($nama_roti !== '' && $harga_roti !== '' && $deskripsi !== '' && $gambar !== '') {
+    if ($nama_roti !== '' && $harga_roti !== '' && $deskripsi !== '' && $gambar !== '' && $stock !== '') {
 
         // validasi ukuran gambar
         if ($_FILES['gambar_roti']['size'] >= $maxSize) {
@@ -61,7 +62,7 @@ if (isset($_POST['btnTambahRoti'])) {
 
         // validasi jika status bernilai true
         if ($status) {
-            $sql = "INSERT INTO bakeries (bakery_name, bakery_img, description, price, created_at) VALUES ('$nama_roti', '$newName', '$deskripsi', '$harga_roti', '$createdAt')";
+            $sql = "INSERT INTO bakeries (bakery_name, bakery_img, description, price, stock, created_at) VALUES ('$nama_roti', '$newName', '$deskripsi', '$harga_roti', '$stock', '$createdAt')";
             $result = mysqli_query($conn, $sql);
             if ($result) {
                 if (move_uploaded_file($_FILES['gambar_roti']['tmp_name'], $locationDir)) {

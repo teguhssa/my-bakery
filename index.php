@@ -138,6 +138,7 @@ $result = mysqli_query($conn, $sql);
 									<div class="product-image">
 										<a href="bread.php?id=' . $data['id'] . '"><img src="assets/upload/' . $data['bakery_img'] . '" alt="product thumbnail"></a>
 									</div>
+									<div class="' . ($data['stock'] == 0 ? 'out-of-stock' : '') . '"></div>
 									<h3>' . $data['bakery_name'] . '</h3>
 									<p class="product-price">' . rupiah($data['price']) . '</p>
 								</div>

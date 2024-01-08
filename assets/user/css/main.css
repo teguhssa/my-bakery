@@ -2458,9 +2458,32 @@ table.order-details tbody td {
 }
 
 .single-product-item {
+  position: relative;
   box-shadow: 0 0 20px #e4e4e4;
   padding-bottom: 50px;
   border-radius: 5px;
+}
+
+.out-of-stock {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background: #555;
+  opacity: 0.5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.out-of-stock::after {
+  content: "Out of stock!";
+  color: #000 !important;
+  font-weight: bold;
+  font-size: 3rem;
+  rotate: 45deg;
 }
 
 .detail-orders {
