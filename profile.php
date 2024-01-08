@@ -133,29 +133,19 @@ $res = mysqli_query($conn, $qOrder);
                                                     <div class="col-md-8">
                                                         <div class="my-info">
                                                             <form action="action/user/update.php" method="post">
-                                                                <table>
-                                                                    <tr>
-                                                                        <td class="placeholder-info"><label>Username</label></td>
-                                                                        <td class="placeholder-value">
-                                                                            <p><?php echo $data['username'] ?></p>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="placeholder-info"><label>Name</label></td>
-                                                                        <td class="placeholder-value-input">
-                                                                            <input type="text" name="name" placeholder="Your name.." class="form-control" value="<?php echo $data['name'] ?>">
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="placeholder-info"><label>Email</label></td>
-                                                                        <td class="placeholder-value">
-                                                                            <p><?php echo $data['email'] ?></p>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td><button class="btnUpdateInfoUser w-100" name="btnUpdateInfoUser">Save</button></td>
-                                                                    </tr>
-                                                                </table>
+                                                                <div class="mb-2">
+                                                                    <label for="username" class="p-0">Username</label>
+                                                                    <input type="text" name="username" id="username" class="w-100 border-0 border-bottom" value="<?php echo $data['username'] ?>">
+                                                                </div>
+                                                                <div class="mb-2">
+                                                                    <label for="username" class="p-0">Name</label>
+                                                                    <input type="text" name="name" id="username" class="w-100 border-0 border-bottom" value="<?php echo $data['name'] ?>">
+                                                                </div>
+                                                                <div class="mb-2">
+                                                                    <label for="username" class="p-0">Email</label>
+                                                                    <input type="text" name="email" id="username" class="w-100 border-0 border-bottom" value="<?php echo $data['email'] ?>">
+                                                                </div>
+                                                                <button name="btnUpdateInfoUser" class="btn btn-warning text-white">Update Profile</button>
                                                             </form>
                                                         </div>
                                                     </div>
