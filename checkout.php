@@ -129,7 +129,7 @@ $qty;
                             <div class="card-title text-lg fs-5"><i class="fas fa-map-marker-alt me-3"></i> Delivey Address</div>
                             <div class="container">
                                 <div class="row">
-                                    
+
                                     <?php
                                     if ($dataAddress !== null) {
                                         echo '
@@ -217,24 +217,7 @@ $qty;
                     <h5>Total Payment: </h5>
                     <p class="total-payment"><?php echo rupiah($total_payment) ?></p>
                     <div class="button-payment-wrapper">
-                        <form action="action/checkout/order.php" method="post" class="w-100">
-                            <input type="hidden" name="address_id" value="<?php echo $dataAddress['id'] ?>">
-                            <input type="hidden" name="cart_id" value="<?php echo $cart_id ?>">
-                            <?php
-                            foreach ($dataInput as $d) {
-                                echo '
-                                <input type="hidden" name="bakery_id[]" value="' . $d['bakery_id'] . '" />
-                                <input type="hidden" name="qty[]" value="' . $d['qty'] . '" />
-                                <input type="hidden" name="subtotal[]" value="' . $d['price'] . '"/>
-                                <input type="hidden" name="total_payment[]" value="' . $total_payment . '" />
-                                ';
-                            }
-
-                            ?>
-                            <?php if ($dataAddress !== null) {
-                                echo '<button class="btnPlaceOrder" name="placeOrder">Place order</button>';
-                            } ?>
-                        </form>
+                        <button class="btnPlaceOrder" type="button" data-bs-toggle="modal" data-bs-target="#modalPayOrder">Place order</button>
                     </div>
                 </div>
             </div>
@@ -289,6 +272,7 @@ $qty;
     <?php include('partials/footer.php') ?>
     <!-- end footer -->
 
+    <?php include('partials/modal/PayOrder.php') ?>
 
     <!-- jquery -->
     <!-- <script src="assets/user/js/jquery-1.11.3.min.js"></script> -->
@@ -310,6 +294,26 @@ $qty;
         function confirmHapus() {
             return confirm('Are you sure?')
         }
+
+        const receiptEl = document.querySelector("#receipt-file")
+        const wrapper = document.querySelector(".preview-receipt-wrapper")
+
+        receiptEl.addEventListener('change', function(e) {
+            let reader = new FileReader()
+            reader.onload = function() {
+                const receiptThumbnail = document.getElementById('receipt-thumbnail')
+                receiptThumbnail.src = reader.result
+            }
+            reader.readAsDataURL(e.target.files[0]);
+            wrapper.classList.remove('d-none')
+        })
+
+        const form =document.querySelector("#form-payment")
+        const modal = document.querySelector('#modalPayOrder')
+        modal.addEventListener('hidden.bs.modal', () => {
+            wrapper.classList.add('d-none')
+            form.reset()
+        })
     </script>
 
 </body>

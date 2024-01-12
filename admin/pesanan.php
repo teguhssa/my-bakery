@@ -57,9 +57,10 @@ $res = mysqli_query($conn, $qPesanan);
                                     <tr>
                                         <th>Nama</th>
                                         <th>Username</th>
-                                        <th>Status Order</th>
                                         <th>Waktu order</th>
+                                        <th>Status Order</th>
                                         <th>Detail order</th>
+                                        <th>Bukti Transfer</th>
                                         <th>Ubah status</th>
                                     </tr>
                                 </thead>
@@ -70,13 +71,15 @@ $res = mysqli_query($conn, $qPesanan);
                                         echo "<tr>";
                                         echo "<td>" . $row['name'] . "</td>";
                                         echo "<td>" . $row['username'] . "</td>";
-                                        echo "<td><div class='badge bg-success'>" . $row['status_order'] . "</div></td>";
                                         echo "<td>" . $orderDate . "</td>";
+                                        echo "<td><div class='badge bg-success'>" . $row['status_order'] . "</div></td>";
                                         echo '<td><button class="btnDetail" id="btnDetail" value=' . $row['order_id'] . ' type="button" data-bs-toggle="modal" data-bs-target="#modalDetailPesanan">Lihat pesanan</button></td>';
+                                        echo '<td><button type="button" class="btn btn-warning text-white btnReceipt" id="btnReceipt" value=' . $row['order_id'] . ' data-bs-toggle="modal" data-bs-target="#modalReceipt"><i class="fas fa-eye"></i></button></td>';
                                         echo "<td>
                                                 <select class='form-select pilih-status' id='pilih-status'>
                                                     <option selected>Pilih status</option>
                                                     <option value='cancel' data-order-id='" . $row['order_id'] . "'>Cancel</option>
+                                                    <option value='ready to ship' data-order-id='" . $row['order_id'] . "'>Siap dikirim</option>
                                                     <option value='shipping' data-order-id='" . $row['order_id'] . "'>Dalam perjalanan</option>
                                                     <option value='done' data-order-id='" . $row['order_id'] . "'>Selesai</option>
                                                 </select>
@@ -96,6 +99,8 @@ $res = mysqli_query($conn, $qPesanan);
     <!-- modal detail pesanan -->
     <?php include('partials/modal/DetailPesanan.php') ?>
     <!-- modal detail pesanan -->
+    <!-- modal receipt -->
+    <?php include('partials/modal/ReceiptImg.php') ?>
 
     <script src="../assets/template/js/bootstrap-bundle.min.js"></script>
     <script src="../assets/template/js/scripts.js"></script>
@@ -131,6 +136,26 @@ $res = mysqli_query($conn, $qPesanan);
                             $("#info-nomor-hp").text(data.phone_number)
                             $("#info-tanggal-pesan").text(data.created_at)
                             $("#info-total").text(data.total_price)
+                        }
+                    }
+                })
+            })
+
+            $(".btnReceipt").on("click", function() {
+                let order_id = $(this).val()
+
+                $.ajax({
+                    url: "action/pesanan/receipt-pesanan.php",
+                    method: "post",
+                    data: {
+                        action: "btnReceipt",
+                        order_id: order_id
+                    },
+                    dataType: "json",
+                    success: function(res) {
+                        if (res.status) {
+                            const { data } = res
+                            $('.img-receipt').attr('src', '../assets/upload/receipt/' + data.payment_img);
                         }
                     }
                 })

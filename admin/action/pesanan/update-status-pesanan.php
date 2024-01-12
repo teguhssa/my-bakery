@@ -12,7 +12,7 @@ if ($_POST['action'] === "updateStatus") {
     $order_id = $_POST['order_id'];
     $response = array();
 
-    if ($status == "done") {
+    if ($status == "ready to ship") {
         $qBakeryId = mysqli_query($conn, "SELECT GROUP_CONCAT(order_detail.bakery_id) AS bakery_ids, GROUP_CONCAT(order_detail.qty) AS qty
         FROM orders
         JOIN order_detail ON orders.id = order_detail.order_id

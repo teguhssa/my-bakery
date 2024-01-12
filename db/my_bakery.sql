@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 08, 2024 at 12:14 PM
+-- Generation Time: Jan 12, 2024 at 12:41 PM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -49,8 +49,8 @@ INSERT INTO `bakeries` (`id`, `bakery_name`, `bakery_img`, `description`, `price
 (3, 'Just Bread', 'upload-20231206042936.jpg', 'Just ordinary bread', 10000, 0, '2023-12-06 04:29:36', '2023-12-19 13:38:44', 1),
 (4, 'donat', 'upload-20240107120201.jpeg', 'donat', 10000, 1, '2024-01-07 12:02:01', '2024-01-08 08:48:51', 0),
 (5, 'kuasong', 'upload-20240107120316.jpeg', 'dsadasdas', 12000, 4, '2024-01-07 12:03:16', '2024-01-08 08:52:17', 0),
-(6, 'macaron', 'upload-20240108085049.jpg', 'very crunchy', 12000, 7, '2024-01-08 08:50:49', '2024-01-08 08:51:06', 0),
-(7, 'roti prancis', 'upload-20240108085143.jpg', 'random string', 10000, 11, '2024-01-08 08:51:43', NULL, 0);
+(6, 'macaron', 'upload-20240108085049.jpg', 'very crunchy', 12000, 6, '2024-01-08 08:50:49', '2024-01-08 08:51:06', 0),
+(7, 'roti prancis', 'upload-20240108085143.jpg', 'random string', 10000, 9, '2024-01-08 08:51:43', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -76,7 +76,7 @@ CREATE TABLE `carts` (
 
 INSERT INTO `carts` (`id`, `user_id`, `bakery_id`, `qty`, `total_price`, `created_at`, `modified_at`, `is_complete`, `is_deleted`) VALUES
 (1, 8, 2, 2, 240000, '2023-12-10 13:36:57', '2023-12-12 11:31:49', 1, 0),
-(2, 8, 4, 2, 240000, '2023-12-10 13:41:42', '2023-12-12 11:31:49', 1, 0),
+(2, 8, 4, 2, 240000, '2023-12-10 13:41:42', '2024-01-11 08:55:28', 1, 1),
 (3, 7, 3, 1, 10000, '2023-12-11 16:45:13', '2023-12-19 13:42:20', 1, 1),
 (4, 7, 2, 2, 240000, '2023-12-11 16:52:18', '2023-12-12 11:31:49', 1, 1),
 (5, 7, 2, 1, 120000, '2023-12-12 10:25:21', '2023-12-12 11:31:49', 1, 1),
@@ -96,12 +96,17 @@ INSERT INTO `carts` (`id`, `user_id`, `bakery_id`, `qty`, `total_price`, `create
 (19, 9, 3, 1, 20000, '2023-12-19 13:38:30', '2023-12-19 13:42:20', 0, 1),
 (20, 9, 3, 1, 10000, '2023-12-19 13:42:32', NULL, 0, 0),
 (21, 10, 5, 1, 1212, '2024-01-07 17:13:56', NULL, 1, 0),
-(22, 10, 4, 1, 10000, '2024-01-07 17:14:08', NULL, 1, 0),
-(23, 10, 4, 1, 10000, '2024-01-07 17:54:25', NULL, 1, 0),
+(22, 10, 4, 1, 10000, '2024-01-07 17:14:08', '2024-01-11 08:55:28', 1, 1),
+(23, 10, 4, 1, 10000, '2024-01-07 17:54:25', '2024-01-11 08:55:28', 1, 1),
 (24, 10, 7, 1, 10000, '2024-01-08 08:52:25', NULL, 1, 0),
 (25, 10, 6, 2, 24000, '2024-01-08 08:52:38', '2024-01-08 11:12:52', 1, 0),
-(26, 10, 4, 1, 10000, '2024-01-08 08:52:50', NULL, 1, 0),
-(27, 10, 6, 2, 24000, '2024-01-08 11:12:21', '2024-01-08 11:12:52', 1, 0);
+(26, 10, 4, 1, 10000, '2024-01-08 08:52:50', '2024-01-11 08:55:28', 1, 1),
+(27, 10, 6, 2, 24000, '2024-01-08 11:12:21', '2024-01-08 11:12:52', 1, 0),
+(28, 10, 4, 1, 10000, '2024-01-11 06:23:07', '2024-01-11 08:55:28', 1, 1),
+(29, 10, 4, 1, 10000, '2024-01-11 09:02:00', NULL, 1, 0),
+(30, 10, 6, 1, 12000, '2024-01-12 08:31:23', NULL, 1, 0),
+(31, 10, 7, 1, 10000, '2024-01-12 08:51:27', NULL, 1, 0),
+(32, 10, 6, 1, 12000, '2024-01-12 10:40:47', NULL, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -113,7 +118,7 @@ CREATE TABLE `orders` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `address_id` int(11) NOT NULL,
-  `status_order` enum('cancel','in process','shipping','done') NOT NULL DEFAULT 'in process',
+  `status_order` enum('cancel','waiting for approve','ready to ship','shipping','done') NOT NULL DEFAULT 'waiting for approve',
   `created_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -132,7 +137,12 @@ INSERT INTO `orders` (`id`, `user_id`, `address_id`, `status_order`, `created_at
 (8, 10, 10, 'done', '2024-01-07 17:14:42'),
 (9, 10, 10, 'done', '2024-01-07 17:54:34'),
 (10, 10, 10, 'done', '2024-01-08 08:53:22'),
-(11, 10, 10, 'done', '2024-01-08 11:12:57');
+(11, 10, 10, 'done', '2024-01-08 11:12:57'),
+(12, 10, 10, 'waiting for approve', '2024-01-12 08:30:00'),
+(13, 10, 10, 'waiting for approve', '2024-01-12 08:31:49'),
+(14, 10, 10, 'ready to ship', '2024-01-12 08:51:51'),
+(15, 10, 10, 'ready to ship', '2024-01-12 08:52:09'),
+(16, 10, 10, 'ready to ship', '2024-01-12 10:41:03');
 
 -- --------------------------------------------------------
 
@@ -173,7 +183,12 @@ INSERT INTO `order_detail` (`id`, `order_id`, `bakery_id`, `qty`, `subtotal`, `t
 (15, 10, 7, 1, 10000, 47000, '2024-01-08 08:53:22', NULL),
 (16, 10, 6, 1, 12000, 47000, '2024-01-08 08:53:22', NULL),
 (17, 10, 4, 1, 10000, 47000, '2024-01-08 08:53:22', NULL),
-(18, 11, 6, 2, 12000, 39000, '2024-01-08 11:12:57', NULL);
+(18, 11, 6, 2, 12000, 39000, '2024-01-08 11:12:57', NULL),
+(19, 12, 4, 1, 10000, 25000, '2024-01-12 08:30:00', NULL),
+(20, 13, 6, 1, 12000, 27000, '2024-01-12 08:31:49', NULL),
+(21, 14, 7, 1, 10000, 25000, '2024-01-12 08:51:51', NULL),
+(22, 15, 7, 1, 10000, 25000, '2024-01-12 08:52:09', NULL),
+(23, 16, 6, 1, 12000, 27000, '2024-01-12 10:41:03', NULL);
 
 -- --------------------------------------------------------
 
@@ -194,7 +209,11 @@ CREATE TABLE `receipt` (
 --
 
 INSERT INTO `receipt` (`id`, `order_id`, `user_id`, `payment_img`, `submitted_at`) VALUES
-(1, 1, 7, 'receipt-1120231212101955.jpg', '2023-12-12 10:19:55');
+(1, 12, 10, 'receipt-20240112083000.jpg', '2024-01-12 08:30:00'),
+(2, 13, 10, 'receipt-20240112083149.jpg', '2024-01-12 08:31:49'),
+(3, 14, 10, 'receipt-1420240112085151.jpg', '2024-01-12 08:51:51'),
+(4, 15, 10, 'receipt-1520240112085209.jpg', '2024-01-12 08:52:09'),
+(5, 16, 10, 'receipt-1620240112104103.jpg', '2024-01-12 10:41:03');
 
 -- --------------------------------------------------------
 
@@ -243,7 +262,7 @@ INSERT INTO `users` (`id`, `name`, `email`, `username`, `password`, `role`, `cre
 (7, 'katarina', 'karina@exp.com', 'karina@exp.com', '1a6262506caed6d26e7306efca90800b5a10afda9f9209afac52b01510f28d46', 'user', '2023-12-08 13:23:37', '2023-12-08 18:20:33'),
 (8, '', 'amir@exp.com', 'amir', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'user', '2023-12-10 13:38:12', NULL),
 (9, '', 'kayla@exp.com', 'kayla', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'user', '2023-12-14 06:04:17', NULL),
-(10, 'kayla', 'kai@exp.com', 'kai', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'user', '2024-01-07 15:54:37', '2024-01-07 15:54:57');
+(10, 'kai', 'kai@exp.com', 'kai', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'user', '2024-01-07 15:54:37', '2024-01-08 12:44:07');
 
 -- --------------------------------------------------------
 
@@ -354,25 +373,25 @@ ALTER TABLE `bakeries`
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `order_detail`
 --
 ALTER TABLE `order_detail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `receipt`
 --
 ALTER TABLE `receipt`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `reviews`

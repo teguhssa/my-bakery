@@ -64,7 +64,7 @@ $result = mysqli_query($conn, $sql);
 							<p class="subtitle">Fresh & Flacky</p>
 							<h1>Fresh Bread from oven</h1>
 							<div class="hero-btns">
-								<a href="shop.html" class="boxed-btn">Bread Collection</a>
+								<a href="all-bread.php" class="boxed-btn">Bread Collection</a>
 							</div>
 						</div>
 					</div>
