@@ -10,7 +10,7 @@
                     <p>To finish this order you can transfer to MyBakery bank <span class="fw-bold">58323043480</span></p>
                 </div>
                 <form action="action/checkout/order.php" method="post" class="w-100" id="form-payment" enctype="multipart/form-data">
-                    <input type="hidden" name="address_id" value="<?php echo $dataAddress['id'] ?>">
+                    <input type="hidden" name="address_id" value="<?php echo $dataAddress['address_id'] ?>">
                     <input type="hidden" name="cart_id" value="<?php echo $cart_id ?>">
                     <div class="mb-3">
                         <input type="file" name="receipt-file" id="receipt-file" class="mb-3 form-control" accept="image/png, image/jpg, image/jpeg" />

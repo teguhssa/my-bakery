@@ -8,8 +8,9 @@ if (!isset($_SESSION['user_id_admin'])) {
     exit();
 }
 // menampilkan semua pesanan
-$qPesanan = "SELECT orders.id AS order_id, users.name, users.username, orders.status_order, orders.created_at
+$qPesanan = "SELECT orders.id AS order_id, users.name, users.username, orders.status_order, orders.created_at, receipt.isApprove
 FROM orders
+JOIN receipt ON receipt.order_id  = orders.id
 JOIN users ON users.id = orders.user_id ORDER BY orders.created_at DESC";
 $res = mysqli_query($conn, $qPesanan);
 
@@ -62,6 +63,7 @@ $res = mysqli_query($conn, $qPesanan);
                                         <th>Detail order</th>
                                         <th>Bukti Transfer</th>
                                         <th>Ubah status</th>
+                                        <th>Setujui pembayaran</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -75,15 +77,24 @@ $res = mysqli_query($conn, $qPesanan);
                                         echo "<td><div class='badge bg-success'>" . $row['status_order'] . "</div></td>";
                                         echo '<td><button class="btnDetail" id="btnDetail" value=' . $row['order_id'] . ' type="button" data-bs-toggle="modal" data-bs-target="#modalDetailPesanan">Lihat pesanan</button></td>';
                                         echo '<td><button type="button" class="btn btn-warning text-white btnReceipt" id="btnReceipt" value=' . $row['order_id'] . ' data-bs-toggle="modal" data-bs-target="#modalReceipt"><i class="fas fa-eye"></i></button></td>';
-                                        echo "<td>
-                                                <select class='form-select pilih-status' id='pilih-status'>
-                                                    <option selected>Pilih status</option>
-                                                    <option value='cancel' data-order-id='" . $row['order_id'] . "'>Cancel</option>
-                                                    <option value='ready to ship' data-order-id='" . $row['order_id'] . "'>Siap dikirim</option>
-                                                    <option value='shipping' data-order-id='" . $row['order_id'] . "'>Dalam perjalanan</option>
-                                                    <option value='done' data-order-id='" . $row['order_id'] . "'>Selesai</option>
-                                                </select>
-                                            </td>";
+                                        echo "<td>";
+                                        if ($row['isApprove']) {
+                                            echo "<select class='form-select pilih-status' id='pilih-status'>
+                                                <option selected>Pilih status</option>
+                                                <option value='cancel' data-order-id='" . $row['order_id'] . "'>Cancel</option>
+                                                <option value='shipping' data-order-id='" . $row['order_id'] . "'>Dalam perjalanan</option>
+                                                <option value='done' data-order-id='" . $row['order_id'] . "'>Selesai</option>
+                                                </select>";
+                                        } else {
+                                            echo 'Approve pembayaran untuk ubah status';
+                                        }
+
+                                        "</td>";
+                                        if ($row['isApprove']) {
+                                            echo "<td><div class='badge bg-success'>Sudah di Approve</div></td>";
+                                        } else {
+                                            echo "<td><button type='button' class='btn btn-success text-white btnApprove' id='btnApprove' data-order-id='" . $row['order_id'] . "'><i class='fas fa-check'></i></button></td>";
+                                        }
                                         echo "</tr>";
                                     }
                                     ?>
@@ -154,8 +165,33 @@ $res = mysqli_query($conn, $qPesanan);
                     dataType: "json",
                     success: function(res) {
                         if (res.status) {
-                            const { data } = res
+                            const {
+                                data
+                            } = res
                             $('.img-receipt').attr('src', '../assets/upload/receipt/' + data.payment_img);
+                        }
+                    }
+                })
+            })
+
+            $(".btnApprove").on('click', function() {
+                const order_id = $(this).data('order-id');
+
+                $.ajax({
+                    url: "action/pesanan/approve-pembayaran.php",
+                    method: "post",
+                    dataType: "json",
+                    data: {
+                        action: "approvePayment",
+                        order_id: order_id
+                    },
+                    beforeSend: function() {
+                        confirm('Approve pembayaran ini?')
+                    },
+                    success: function(res) {
+                        if (res.status) {
+                            alert('Pembayaran di approve')
+                            window.location.href = 'pesanan.php'
                         }
                     }
                 })

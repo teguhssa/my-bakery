@@ -18,27 +18,36 @@ $result = mysqli_query($conn, $sql);
 $data = mysqli_fetch_assoc($result);
 
 // query untuk mendapatkan data alamat
-$getAddress = "SELECT * FROM user_addresses WHERE user_id = '$user_id' AND is_deleted = 0 ORDER BY is_default = 1 DESC ";
+$getAddress = "SELECT user_addresses.id AS address_id, user_addresses.user_id, user_addresses.city, user_addresses.fullname, user_addresses.full_address, user_addresses.postal_code, user_addresses.phone_number, user_addresses.is_default, districts.id AS district_id, districts.district
+FROM user_addresses
+JOIN districts ON user_addresses.district_id = districts.id
+WHERE user_addresses.user_id = '$user_id' AND user_addresses.is_deleted = 0 ORDER BY user_addresses.is_default = 1 DESC ";
 $userInfo = mysqli_query($conn, $getAddress);
 
 //  menapilkan data pembelian
-$qOrder = "SELECT 
+$qOrder = "SELECT
+bakeries.id AS bakery_id,
+bakeries.bakery_name,
+bakeries.bakery_img,
+order_detail.qty,
+order_detail.total_price,
 orders.id AS order_id,
-orders.user_id,
 orders.status_order,
-orders.created_at,
-user_addresses.full_address,
-GROUP_CONCAT(bakeries.bakery_name) AS bakery_names,
-SUM(order_detail.qty) AS total_qty,
-order_detail.total_price
-FROM orders
-JOIN order_detail ON orders.id = order_detail.order_id
-JOIN bakeries ON order_detail.bakery_id = bakeries.id
-JOIN user_addresses ON orders.address_id = user_addresses.id
+orders.created_at
+FROM bakeries
+JOIN order_detail ON bakeries.id = order_detail.bakery_id
+JOIN orders ON order_detail.order_id = orders.id
 WHERE orders.user_id = '$user_id'
-GROUP BY orders.id, orders.user_id, orders.status_order, orders.created_at
-ORDER BY orders.created_at DESC";
+ORDER BY orders.created_at DESC;";
 $res = mysqli_query($conn, $qOrder);
+
+
+$dataDistrict = array();
+$qDistrict = "SELECT * FROM districts ORDER BY district ASC";
+$resultDistrict = mysqli_query($conn, $qDistrict);
+while ($row = mysqli_fetch_assoc($resultDistrict)) {
+    $dataDistrict[] = $row;
+}
 
 ?>
 <!DOCTYPE html>
@@ -72,6 +81,12 @@ $res = mysqli_query($conn, $qOrder);
     <link rel="stylesheet" href="assets/user/css/main.css">
     <!-- responsive -->
     <link rel="stylesheet" href="assets/user/css/responsive.css">
+
+    <style>
+        .star-light {
+            color: #e9ecef;
+        }
+    </style>
 
 </head>
 
@@ -177,13 +192,15 @@ $res = mysqli_query($conn, $qOrder);
                                                 echo '</div>
                                                                 <div class="address-info d-flex flex-column gap-2 mb-3">
                                                                     <p class="m-0">' . $row['phone_number'] . '</p>
+                                                                    <p class="m-0">' . $row['city'] . '</p>
+                                                                    <p class="m-0">'. $row['district'] .'</p>
                                                                     <p class="m-0">' . $row['full_address'] . '</p>
                                                                     <div class="btnAddres d-flex align-items-center gap-2">';
                                                 if (!$row['is_default']) {
-                                                    echo '<a href="action/address/set-default.php?id=' . $row['id'] . '&is_default=' . $row['is_default'] . '" class="btnActiviedAddress text-white">Set as default</a>';
+                                                    echo '<a href="action/address/set-default.php?id=' . $row['address_id'] . '&is_default=' . $row['is_default'] . '" class="btnActiviedAddress text-white">Set as default</a>';
                                                 }
-                                                echo '<button value=' . $row['id'] . ' class="btnEditAddress" id="btnFetchAlamat" data-bs-toggle="modal" data-bs-target="#modalEditAlamat">Edit</button>
-                                                        <a href="action/address/delete.php?id=' . $row['id'] . '" onclick="return confirmHapus()">Delete</a>
+                                                echo '<button value=' . $row['address_id'] . ' class="btnEditAddress" id="btnFetchAlamat" data-bs-toggle="modal" data-bs-target="#modalEditAlamat">Edit</button>
+                                                        <a href="action/address/delete.php?id=' . $row['address_id'] . '" onclick="return confirmHapus()">Delete</a>
                                                                     </div>
                                                                 </div>
                                                         </div>
@@ -208,31 +225,39 @@ $res = mysqli_query($conn, $qOrder);
                         <div class="tab-pane fade" id="purchase-tab-pane" role="tabpanel" aria-labelledby="purchase-tab" tabindex="0">
                             <div class="row justify-content-center align-items-center">
                                 <div class="col-lg-8 col-md-12">
+
                                     <?php
                                     if ($res->num_rows > 0) {
                                         while ($dataOrder = mysqli_fetch_assoc($res)) {
                                             $orderDate = date("d F Y", strtotime($dataOrder['created_at']));
                                             echo '
-                                                <div class="card my-4">
-                                                    <div class="card-body">
-                                                        <div class="card-title d-flex align-items-center gap-2">
-                                                            <p class="m-0 fw-bold">' . $orderDate . '</p>
-                                                            <div class="badge bg-success">' . $dataOrder['status_order'] . '</div>
-                                                        </div>
-                                                        <div class="d-flex flex-column gap-2 mb-3">
-                                                            <p class="m-0 fw-bold">Bakery: ' . $dataOrder['bakery_names'] . '</p>
-                                                            <p class="m-0">Total Qty: x ' . $dataOrder['total_qty'] . '</p>
-                                                            <p class="m-0">to: ' . $dataOrder['full_address'] . '</p>
-                                                        </div>
-                                                        <div class="d-flex justify-content-end">
-                                                            <p class="fw-bold" style="margin-bottom: 0; margin-right: 20px;">Total Price</p>
-                                                            <p class="m-0 total-amount">' . rupiah($dataOrder['total_price']) . '</p>
-                                                        </div>
-                                                        <div class="d-flex justify-content-end gap-3">
-                                                            <button class="btnPostReceipt" data-order-id=' . $dataOrder['order_id'] . ' id="btnDetail" data-bs-toggle="modal" data-bs-target="#modalDetailOrder">Detail Order</button>
+                                            <div class="card mb-3">
+                                                <div class="card-body">
+                                                    <div class="card-title d-flex align-items-center gap-2">
+                                                        <p class="m-0 fw-bold">' . $orderDate . '</p>
+                                                        <div class="badge bg-success">' . $dataOrder['status_order'] . '</div>
+                                                    </div>
+                                                    <div class="address-info d-flex align-items-center gap-2 mb-3">
+                                                        <div class="d-flex flex-grow-1">
+                                                            <img src="assets/upload/' . $dataOrder['bakery_img'] . '" alt="bread" width="100" />
+                                                            <div class="d-flex flex-column" style="margin-left: 20px;">
+                                                                <p class="m-0 fw-bold">' . $dataOrder['bakery_name'] . '</p>
+                                                                <p class="m-0">x ' . $dataOrder['qty'] . '</p>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>';
+                                                    <div class="d-flex justify-content-end">
+                                                        <p class="fw-bold" style="margin-bottom: 0; margin-right: 20px;">Total Price</p>
+                                                        <p class="m-0 total-amount">' . rupiah($dataOrder['total_price']) . '</p>
+                                                    </div>
+                                                    <div class="d-flex justify-content-end gap-3">
+                                                        <button class="btnPostReceipt" data-order-id=' . $dataOrder['order_id'] . ' id="btnDetail" data-bs-toggle="modal" data-bs-target="#modalDetailOrder">Detail Order</button>';
+                                            if ($dataOrder['status_order'] === 'done') {
+                                                echo '<button class="btnReview btn btn-warning text-white" data-order-id=' . $dataOrder['order_id'] . ' " data-bakery-id=' . $dataOrder['bakery_id'] . ' id="btnReview" data-bs-toggle="modal" data-bs-target="#modalReview">Review Order</button>';
+                                            }
+                                            echo '</div>
+                                                </div>
+                                            </div>';
                                         }
                                     } else {
                                         echo '
@@ -271,6 +296,7 @@ $res = mysqli_query($conn, $qOrder);
     <?php include('partials/footer.php') ?>
     <!-- end footer -->
 
+    <?php include('partials/modal/ReviewOrder.php') ?>
 
     <!-- jquery -->
     <!-- <script src="assets/user/js/jquery-1.11.3.min.js"></script> -->
@@ -301,7 +327,7 @@ $res = mysqli_query($conn, $qOrder);
                     url: "action/order/detail.php",
                     data: {
                         action: "orderDetail",
-                        order_id: order_id
+                        order_id: order_id,
                     },
                     method: "post",
                     dataType: "json",
@@ -311,27 +337,13 @@ $res = mysqli_query($conn, $qOrder);
                                 data
                             } = res
 
-                            $("#order-date").text(res.date_order)
-                            // buat element untuk ditampilkan
-                            const detailElement = data.map((item, index) => (
-                                ` <div class="card-body">
-                                    <div class="address-info d-flex align-items-center gap-2 mb-3">
-                                        <div class="d-flex flex-grow-1">
-                                            <img src="assets/upload/${item.bakery_img}" alt="bread" width="100" />
-                                            <div class="d-flex flex-column" style="margin-left: 20px;">
-                                                <p class="m-0 fw-bold">${item.bakery_name}</p>
-                                                <p class="m-0">x ${item.qty}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-content-end">
-                                        <p class="fw-bold" style="margin-bottom: 0; margin-right: 20px;">Total Price</p>
-                                        <p class="m-0 total-amount">${rupiah(item.subtotal)}</p>
-                                    </div>
-                                </div>`
-                            ))
-
-                            $("#order-detail-wrapper").html(detailElement)
+                            $('#orderDate').text(res.date_order)
+                            $('#status_order').text(data.status_order)
+                            $('#fullAddress').text(data.full_address)
+                            $('#imgBread').attr('src', 'assets/upload/' + data.bakery_img)
+                            $('#breadName').text(data.bakery_name)
+                            $('#breadQty').text(data.qty)
+                            $('#total-amount').text(rupiah(data.total_price))
                         }
                     }
                 })
@@ -350,27 +362,168 @@ $res = mysqli_query($conn, $qOrder);
                     method: "post",
                     dataType: "json",
                     success: function(res) {
-
+                    
                         const {
                             data
                         } = res
 
+                        $(".district_id_edit").val(data.district_id)
                         $("#fullname_edit").val(data.fullname)
                         $("#phone_number_edit").val(data.phone_number)
                         $("#city_edit").val(data.city)
                         $("#postal_code_edit").val(data.postal_code)
                         $("#full_address_edit").text(data.full_address)
-                        $("#edit_id").val(data.id)
+                        $("#edit_id").val(data.address_id)
                     }
                 })
             });
         });
 
+        // star review
+        let rating = 0
+
+        $(document).on('mouseenter', '.submit_star', function() {
+            let rating = $(this).data('rating')
+
+            reset_background()
+
+            for (let count = 1; count <= rating; count++) {
+                $("#submit_star_" + count).addClass('text-warning')
+            }
+        })
+
+        function reset_background() {
+            for (let count = 1; count <= 5; count++) {
+                $('#submit_star_' + count).addClass('star-light');
+
+                $('#submit_star_' + count).removeClass('text-warning');
+            }
+        }
+
+        $(document).on('mouseleave', '.submit_star', function() {
+            reset_background()
+
+            for (let count = 1; count <= rating; count++) {
+                $('#submit_star_' + count).removeClass('star-light');
+
+                $('#submit_star_' + count).addClass('text-warning');
+            }
+        })
+
+        $(document).on('click', '.submit_star', function() {
+            rating = $(this).data('rating')
+        })
+
+        $('#modalReview').on('hidden.bs.modal', function() {
+            reset_background()
+            rating = 0
+        })
+        // end star review
+
+        // fetch data order
+        $(".btnReview").on('click', function() {
+            let bakery_id = $(this).data('bakery-id')
+            let order_id = $(this).data('order-id')
+
+            $.ajax({
+                url: "action/testi/fetch-order.php",
+                method: "post",
+                dataType: "json",
+                data: {
+                    action: "btnFecthOrder",
+                    bakery_id: bakery_id,
+                    order_id: order_id
+                },
+                success: function(res) {
+
+                    const {
+                        data
+                    } = res
+
+                    const {
+                        data_rating
+                    } = res
+
+                    if (res.status) {
+
+                        $('#bakeryImg').attr('src', './assets/upload/' + data[0].bakery_img)
+                        $('#bakeryName').text(data[0].bakery_name)
+                        $('#bakeryQty').text(data[0].qty)
+                        $('#order_id').val(data[0].order_id)
+                        $('#bakery_id').val(data[0].bakery_id)
+                        $('#rating').val(rating)
+
+                        let starElement = ''
+                        if (data_rating.length > 0) {
+
+                            let userRating = parseInt(data_rating[0].rating)
+
+                            for (let star = 1; star <= 5; star++) {
+
+                                let className = ''
+
+                                if (userRating >= star) {
+                                    className = 'text-warning'
+                                } else {
+                                    className = 'star-light'
+                                }
+
+                                starElement += '<i class="fas fa-star ' + className + ' mr-1"></i>';
+                            }
+                            starElement += `<p>${data_rating[0].review_description }</p>`
+
+                            $('#star-wrapper').html(starElement)
+                            $('#review-wrapper').addClass('d-none')
+                        } else {
+                            starElement = ''
+                            $('#star-wrapper').html(starElement)
+                            $('#review-wrapper').removeClass('d-none')
+                        }
+
+                    }
+                }
+            })
+        })
+
+        // submit review
+        $('#btnSubmitReview').on('click', function(e) {
+            e.preventDefault()
+
+            const reviewDesc = $('.review-desc').val()
+            const order_id = $('#order_id').val()
+            const bakery_id = $('#bakery_id').val()
+
+            if (rating === 0) {
+                alert('Rating cannot be empty!')
+                return false
+            }
+
+            $.ajax({
+                url: "action/testi/review-order.php",
+                method: "post",
+                dataType: "json",
+                data: {
+                    action: "btnPostReview",
+                    bakery_id: bakery_id,
+                    order_id: order_id,
+                    rating: rating,
+                    reviewDesc: reviewDesc
+                },
+                success: function(res) {
+
+                    if (res.status) {
+                        alert(res.message);
+                        window.location.href = "profile.php"
+                    }
+                }
+            })
+
+        })
+
         // confirm dialog sebelum hapus
         function confirmHapus() {
             return confirm("Are you sure??")
         }
-
         // 
     </script>
 

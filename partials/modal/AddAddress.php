@@ -17,7 +17,18 @@
                          </div>
                      </div>
                      <div class="mb-3">
-                         <input type="text" name="city" id="city" class="form-control p-3" placeholder="Your City..." required />
+                         <input type="text" name="city" id="city" class="form-control p-3" placeholder="Your City..." value="bogor" disabled />
+                     </div>
+                     <div class="mb-3">
+                         <select name="district_id" id="district_id" class="form-control">
+                             <?php
+                                foreach ($dataDistrict as $data) {
+                                    echo "
+                                        <option value=" . $data['id'] . ">" . $data['district'] . "</option>
+                                        ";
+                                }
+                                ?>
+                         </select>
                      </div>
                      <div class="mb-3">
                          <input type="number" name="postal_code" id="postal_code" class="form-control" placeholder="Your Postal code..." required />

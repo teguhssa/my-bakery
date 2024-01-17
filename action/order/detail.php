@@ -9,34 +9,23 @@ session_start();
 if ($_POST['action'] === "orderDetail") {
     $user_id = $_SESSION['user_id'];
     $order_id = $_POST['order_id'];
+    // $bakery_id = $_POST['bakery_id'];
     $response = array();
-    $data = array();
+    // $data = array();
     $dateOrder;
 
-    $sql = "SELECT 
-    orders.id AS order_id,
-    orders.user_id,
-    orders.status_order,
-    orders.created_at,
-    bakeries.bakery_name,
-    bakeries.bakery_img,
-    order_detail.qty,
-    order_detail.qty * order_detail.subtotal AS subtotal,
-    order_detail.total_price
-
+    $sql = "SELECT orders.status_order, orders.created_at AS order_date, order_detail.total_price, order_detail.qty, user_addresses.full_address, bakeries.bakery_name, bakeries.bakery_img
     FROM orders
     JOIN order_detail ON orders.id = order_detail.order_id
     JOIN bakeries ON order_detail.bakery_id = bakeries.id
-    WHERE orders.user_id = '$user_id' AND orders.id = '$order_id' ";
+    JOIN user_addresses ON orders.address_id = user_addresses.id
+    WHERE orders.id = '$order_id' ";
 
     $d = mysqli_query($conn, $sql);
 
     if ($d) {
-        while ($row = mysqli_fetch_assoc($d)) {
-            $data[] = $row;
-            $dateOrder = $row['created_at'];
-        }
-        $orderDate = date("d F Y", strtotime($dateOrder));
+        $data = mysqli_fetch_assoc($d);
+        $orderDate = date("d F Y", strtotime($data['order_date']));
         $response['status'] = true;
         $response['data'] = $data;
         $response['date_order'] = $orderDate;

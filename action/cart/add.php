@@ -11,10 +11,16 @@ if (isset($_POST['addCart'])) {
     $user_id = $_SESSION['user_id'];
     $bakery_id = $_POST['bakery_id'];
     $qty = (int)$_POST['qty'];
+    
     $price = $_POST['price'];
     $createdAt = date('Y-m-d H:i:s');
     // menjumlahkan harga dengan kuantitas
     $total_price = (int)$qty * $price;
+
+    // $req = array($qty, $total_price);
+
+    // print_r($req);
+    // die;
 
     $qStockBakery = mysqli_query($conn, "SELECT stock FROM bakeries WHERE id = '$bakery_id' ");
     $stockBakery = mysqli_fetch_assoc($qStockBakery);
@@ -30,8 +36,8 @@ if (isset($_POST['addCart'])) {
         $dataExist = mysqli_fetch_assoc($res);
 
         if ($res->num_rows > 0) {
-            $new_price = $dataExist['total_price'] += $price;
-            $new_qty = $dataExist['qty'] += 1;
+            $new_price = $dataExist['total_price'] += $total_price;
+            $new_qty = $dataExist['qty'] += $qty;
             $updatePrice = "UPDATE carts SET qty = '$new_qty', total_price = '$new_price' WHERE user_id = '$user_id' ";
             $res = mysqli_query($conn, $updatePrice);
 

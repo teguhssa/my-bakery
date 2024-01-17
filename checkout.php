@@ -11,6 +11,10 @@ if (!isset($_SESSION['username'])) {
     exit;
 }
 
+if (!isset($_SESSION['isValidated'])) {
+    header("Location: cart.php");
+}
+
 // user id
 $user_id = $_SESSION['user_id'];
 
@@ -26,17 +30,27 @@ $res = mysqli_query($conn, $sql);
 $dataAddress;
 
 // fetch semua alamat untuk modal
-$qAddress = "SELECT * FROM user_addresses WHERE user_id = '$user_id' AND is_deleted = 0 ORDER BY is_default = 1 DESC ";
+$qAddress = "SELECT user_addresses.id AS address_id, user_addresses.user_id, user_addresses.city, user_addresses.fullname, user_addresses.full_address, user_addresses.postal_code, user_addresses.phone_number, user_addresses.is_default, districts.id AS district_id, districts.district
+FROM user_addresses
+JOIN districts ON user_addresses.district_id = districts.id
+WHERE user_addresses.user_id = '$user_id' AND user_addresses.is_deleted = 0 ORDER BY user_addresses.is_default = 1 DESC ";
 $allAddress = mysqli_query($conn, $qAddress);
 
 // validasi alamat yang ditampilkan
 if (isset($_GET['address_id'])) {
     $address_id = $_GET['address_id'];
-    $s = mysqli_query($conn, "SELECT * FROM user_addresses WHERE id = '$address_id' AND is_deleted = 0 AND user_id = '$user_id' ");
+    $qSelectedAddress = "SELECT user_addresses.id AS address_id, user_addresses.user_id, user_addresses.city, user_addresses.fullname, user_addresses.full_address, user_addresses.postal_code, user_addresses.phone_number, user_addresses.is_default, districts.id AS district_id, districts.district, districts.fee
+    FROM user_addresses
+    JOIN districts ON user_addresses.district_id = districts.id
+    WHERE user_addresses.id = '$address_id' AND user_addresses.user_id = '$user_id' AND user_addresses.is_deleted = 0";
+    $s = mysqli_query($conn, $qSelectedAddress);
     $dataAddress = mysqli_fetch_assoc($s);
 } else {
     // fetching alamat default
-    $qAlamat = "SELECT * FROM user_addresses WHERE is_default = 1 AND is_deleted = 0 AND user_id = '$user_id' ";
+    $qAlamat = "SELECT user_addresses.id AS address_id, user_addresses.user_id, user_addresses.city, user_addresses.fullname, user_addresses.full_address, user_addresses.postal_code, user_addresses.phone_number, user_addresses.is_default, districts.id AS district_id, districts.district, districts.fee
+    FROM user_addresses
+    JOIN districts ON user_addresses.district_id = districts.id
+    WHERE user_addresses.user_id = '$user_id' AND user_addresses.is_deleted = 0 AND user_addresses.is_default = 1 ";
     $r = mysqli_query($conn, $qAlamat);
     $dataAddress = mysqli_fetch_assoc($r);
 }
@@ -47,7 +61,7 @@ $qTotalPrice = "SELECT SUM(total_price) as total FROM carts WHERE is_complete = 
 $r = mysqli_query($conn, $qTotalPrice);
 
 $subtotal = mysqli_fetch_assoc($r);
-$total_payment = $subtotal['total'] + 12000 + 3000;
+$total_payment = $subtotal['total'] + $dataAddress['fee'] + 3000;
 
 // menampung id yang akan di kirim untuk checkout
 $cart_id;
@@ -135,7 +149,7 @@ $qty;
                                         echo '
                                                 <div class="d-flex flex-column">
                                                     <p class="m-0"><span class="fw-bold">' . $dataAddress['fullname'] . '</span> ' . $dataAddress['phone_number'] . '</p>
-                                                    <p>' . $dataAddress['full_address'] . ' , ' . $dataAddress['city'] . ' , ' . $dataAddress['postal_code'] . '</p>
+                                                    <p>' . $dataAddress['full_address'] . ' , '.$dataAddress['district'].', ' . $dataAddress['city'] . ' , ' . $dataAddress['postal_code'] . '</p>
                                                 </div>';
 
                                         if ($allAddress->num_rows > 1) {
@@ -211,7 +225,7 @@ $qty;
                     <h5>Subtotal:</h5>
                     <p><?php echo rupiah($subtotal['total']) ?></p>
                     <h5>Total Shipping:</h5>
-                    <p>Rp. 12.000</p>
+                    <p><?php echo rupiah($dataAddress['fee']) ?></p>
                     <h5>Service Fee:</h5>
                     <p>Rp. 3000</p>
                     <h5>Total Payment: </h5>
@@ -255,7 +269,7 @@ $qty;
                                 <p class="mb-2">' . $address['full_address'] . '</p>
                             </div>
                             <div>
-                                <a href="checkout.php?address_id=' . $address['id'] . '" class="btnChooseAddress">Choose</a>
+                                <a href="checkout.php?address_id=' . $address['address_id'] . '" class="btnChooseAddress">Choose</a>
                             </div>
                             <hr>
                         </div>
@@ -314,6 +328,7 @@ $qty;
             wrapper.classList.add('d-none')
             form.reset()
         })
+
     </script>
 
 </body>

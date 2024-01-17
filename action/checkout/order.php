@@ -40,7 +40,6 @@ if (isset($_POST['placeOrder'])) {
         if (in_array(strtolower($ext), $validExt)) {
             $status = true;
         } else {
-            // die('stop sini');
             echo '<script>alert("Extention file is not allowed!"); window.location.href="../../checkout.php"</script>';
             exit;
         }

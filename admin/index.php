@@ -42,6 +42,18 @@ JOIN users ON orders.user_id = users.id
 WHERE orders.status_order <> 'done' ORDER BY order_time DESC";
 $r = mysqli_query($conn, $qPesananAktif);
 
+$qAvarageReviews = "SELECT * FROM reviews ORDER BY created_at DESC";
+$dataRating = mysqli_query($conn, $qAvarageReviews);
+$avgRating = 0;
+$totalReview = 0;
+$totalRating = 0;
+
+foreach($dataRating as $rating) {
+    $totalReview++;
+    $totalRating = $totalRating + $rating['rating'];
+    $avgRating = $totalRating / $totalReview;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -151,6 +163,19 @@ $r = mysqli_query($conn, $qPesananAktif);
                                         <div class="d-flex align-items-center justify-content-between">
                                             <a class="small text-white stretched-link" href="user.php">Kelola</a>
                                             <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card bg-warning text-white mb-4">
+                                <div class="card-body">
+                                    <div class="d-flex flex-column">
+                                        <h5>Rata-rata reviews</h5>
+                                        <div class="d-flex align-items-center justify-content-between fs-4 mb-2">
+                                            <i class="fas fa-star"></i>
+                                            <p class="mb-0 fw-bold"><?php echo number_format($avgRating, 1)?></p>
                                         </div>
                                     </div>
                                 </div>

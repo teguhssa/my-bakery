@@ -43,4 +43,5 @@ if (isset($_POST['btnLogout'])) {
     unset($_SESSION['username_admin']);
     unset($_SESSION['flash_msg']);
     header("Location: ../login.php");
+    exit;
 }

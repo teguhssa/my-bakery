@@ -21,6 +21,10 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                     Pesanan
                 </a>
+                <a class="nav-link" href="./penilaian.php">
+                    <div class="sb-nav-link-icon"><i class="fas fa-star"></i></div>
+                    Penilaian
+                </a>
             </div>
         </div>
         <div class="sb-sidenav-footer">

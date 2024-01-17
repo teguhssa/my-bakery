@@ -28,9 +28,10 @@ $r = mysqli_query($conn, $qTotalPrice);
 
 $total_price = mysqli_fetch_assoc($r);
 
+$dataForm = array();
 
 ?>
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -113,6 +114,7 @@ $total_price = mysqli_fetch_assoc($r);
                             <tbody>
                                 <?php
                                 while ($data = mysqli_fetch_assoc($res)) {
+                                    $dataForm[] = $data;
                                     echo '
                                             <tr class="table-body-row">
                                                 <td class="product-remove">
@@ -126,16 +128,16 @@ $total_price = mysqli_fetch_assoc($r);
                                                 <td class="product-price">' . rupiah($data['price']) . '</td>
                                                 <td class="cart-product-quantity">
                                                     <form action="action/cart/update-qty.php" method="post">
-                                                        <input type="hidden" name="bakery_id" value='.$data['bakery_id'].'>
-                                                        <input type="hidden" name="price" id="price" value='.$data['price'].'>
-                                                        <input type="hidden" name="qty" id="qty" value='.$data['qty'].'>
-                                                        <input type="hidden" name="total_price" id="total_price" value='.$data['total_price'].'>
+                                                        <input type="hidden" name="bakery_id" value=' . $data['bakery_id'] . '>
+                                                        <input type="hidden" name="price" id="price" value=' . $data['price'] . '>
+                                                        <input type="hidden" name="qty" id="qty" value=' . $data['qty'] . '>
+                                                        <input type="hidden" name="total_price" id="total_price" value=' . $data['total_price'] . '>
                                                         <button class="cart-qty-btn" id="cart-plus" name="btnMinQtyCart">-</button>
                                                     </form>
                                                     <input type="number" value=' . $data['qty'] . ' disabled>
                                                     <form action="action/cart/update-qty.php" method="post">
-                                                        <input type="hidden" name="bakery_id" value='.$data['bakery_id'].'>
-                                                        <input type="hidden" name="price" id="price" value='.$data['price'].'>
+                                                        <input type="hidden" name="bakery_id" value=' . $data['bakery_id'] . '>
+                                                        <input type="hidden" name="price" id="price" value=' . $data['price'] . '>
                                                         <button class="cart-qty-btn" id="cart-plus" name="btnAddQtyCart">+</button>
                                                     </form>
                                                 </td>
@@ -167,9 +169,21 @@ $total_price = mysqli_fetch_assoc($r);
                         </table>
                         <div class="cart-buttons">
                             <?php
-                                if($res->num_rows > 0) {
-                                    echo '<a href="checkout.php" class="boxed-btn black">Check Out</a>';
+                            if ($res->num_rows > 0) {
+
+                                echo
+                                '<form method="post" action="action/checkout/validate-order.php">';
+                                foreach ($dataForm as $row) {
+                                    echo '
+                                    <input type="hidden" name="bakery_id[]" value="' . $row['bakery_id'] . '"/>
+                                    <input type="hidden" name="qty[]" value="' . $row['qty'] . '"/>
+                                    ';
                                 }
+
+                                echo '
+                                <button name="btnValidateOrder" class="btn btn-warning text-white">Check Out</button>
+                                </form>';
+                            }
                             ?>
                         </div>
                     </div>
@@ -201,7 +215,7 @@ $total_price = mysqli_fetch_assoc($r);
     <script src="assets/user/js/main.js"></script>
 
     <script>
-        function confirmHapus () {
+        function confirmHapus() {
             return confirm('Are you sure?')
         }
     </script>
