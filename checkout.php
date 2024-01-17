@@ -11,8 +11,9 @@ if (!isset($_SESSION['username'])) {
     exit;
 }
 
-if (!isset($_SESSION['isValidated'])) {
+if (!isset($_SESSION['isValidated']) || $_SESSION['isValidated'] === false) {
     header("Location: cart.php");
+    exit;
 }
 
 // user id
@@ -125,6 +126,7 @@ $qty;
                     <div class="breadcrumb-text">
                         <p>Fresh and Flacky</p>
                         <h1>Checkout</h1>
+                        <?php var_dump($_SESSION['isValidated']) ?>
                     </div>
                 </div>
             </div>

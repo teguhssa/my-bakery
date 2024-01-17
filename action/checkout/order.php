@@ -87,7 +87,7 @@ if (isset($_POST['placeOrder'])) {
 
             $qUpdateCart .= implode(',', $valuesUpdate);
             $qUpdateCart .= ")";
-
+            $_SESSION['isValidated'] = false;
             mysqli_query($conn, $qUpdateCart);
             echo '<script>alert("Order placed!"); window.location.href="../../profile.php"</script>';
         } else {
