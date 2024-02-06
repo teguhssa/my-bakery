@@ -785,6 +785,95 @@ a.mobile-show {
   letter-spacing: 7px;
 }
 
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.4rem 7%;
+  background-color: transparent;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  font-family: "Poppins";
+}
+
+.navbar-logo {
+  color: #fff;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.navbar-nav a {
+  font-weight: 700;
+  color: #fff;
+  transition: 0.3s;
+  display: inline-block;
+  margin: 0 1rem;
+}
+
+.navbar-nav a:hover {
+  color: #F28123;
+}
+
+.navbar-extra a {
+  margin: 0 0.5rem;
+  color: #fff;
+}
+
+#hamburger {
+  display: none;
+}
+
+.item-cart {
+  position: absolute;
+  bottom: 28px;
+  left: 16px;
+  right: 0;
+  background: #F28123;
+  color: #fff;
+  border-radius: 100%;
+  font-size: 0.75rem;
+  padding: 4px;
+  text-align: center;
+}
+
+.dot-notif {
+  position: absolute;
+  background-color: #F28123;
+  width: 10px;
+  padding: 8px;
+  border-radius: 100%;
+  bottom: 29px;
+  right: 0;
+  left: 18px;
+}
+
+.notif-info {
+  position: absolute;
+  left: -119px;
+  width: 300px;
+  max-height: 300px;
+  overflow: auto;
+  padding: 12px;
+  background-color: #fff;
+  border-radius: 4px;
+  display: none;
+  transition: 0.3s;
+}
+
+#notif-info:hover > .notif-info {
+  display: block;
+}
+
 /* -----------------------------------------------------------------------------
 
 # Footer Styles

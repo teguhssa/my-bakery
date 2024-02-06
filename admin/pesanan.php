@@ -143,7 +143,6 @@ $res = mysqli_query($conn, $qPesanan);
                             $("#info-username").text(data.username)
                             $("#info-alamat").text(data.full_address)
                             $("#info-kota").text(data.city)
-                            $("#info-kode-pos").text(data.postal_code)
                             $("#info-nomor-hp").text(data.phone_number)
                             $("#info-tanggal-pesan").text(data.created_at)
                             $("#info-total").text(data.total_price)

@@ -47,3 +47,45 @@
 #hamburger {
     display: none;
 }
+
+.item-cart {
+  position: absolute;
+  bottom: 28px;
+  left: 16px;
+  right: 0;
+  background: #F28123;
+  color: #fff;
+  border-radius: 100%;
+  font-size: 0.75rem;
+  padding: 4px;
+  text-align: center;
+}
+
+.dot-notif {
+  position: absolute;
+  background-color: #F28123;
+  width: 10px;
+  padding: 8px;
+  border-radius: 100%;
+  bottom: 29px;
+  right: 0;
+  left: 18px;
+}
+
+.notif-info {
+  position: absolute;
+  left: -119px;
+
+  width: 300px;
+  max-height: 300px;
+  overflow: auto;
+  padding: 12px;
+  background-color: #fff;
+  border-radius: 4px;
+  display: none;
+  transition: 0.3s;
+}
+
+#notif-info:hover > .notif-info {
+  display: block;
+}

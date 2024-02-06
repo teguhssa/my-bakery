@@ -31,7 +31,7 @@ $res = mysqli_query($conn, $sql);
 $dataAddress;
 
 // fetch semua alamat untuk modal
-$qAddress = "SELECT user_addresses.id AS address_id, user_addresses.user_id, user_addresses.city, user_addresses.fullname, user_addresses.full_address, user_addresses.postal_code, user_addresses.phone_number, user_addresses.is_default, districts.id AS district_id, districts.district
+$qAddress = "SELECT user_addresses.id AS address_id, user_addresses.user_id, user_addresses.city, user_addresses.fullname, user_addresses.full_address, user_addresses.phone_number, user_addresses.is_default, districts.id AS district_id, districts.district
 FROM user_addresses
 JOIN districts ON user_addresses.district_id = districts.id
 WHERE user_addresses.user_id = '$user_id' AND user_addresses.is_deleted = 0 ORDER BY user_addresses.is_default = 1 DESC ";
@@ -40,7 +40,7 @@ $allAddress = mysqli_query($conn, $qAddress);
 // validasi alamat yang ditampilkan
 if (isset($_GET['address_id'])) {
     $address_id = $_GET['address_id'];
-    $qSelectedAddress = "SELECT user_addresses.id AS address_id, user_addresses.user_id, user_addresses.city, user_addresses.fullname, user_addresses.full_address, user_addresses.postal_code, user_addresses.phone_number, user_addresses.is_default, districts.id AS district_id, districts.district, districts.fee
+    $qSelectedAddress = "SELECT user_addresses.id AS address_id, user_addresses.user_id, user_addresses.city, user_addresses.fullname, user_addresses.full_address, user_addresses.phone_number, user_addresses.is_default, districts.id AS district_id, districts.district, districts.fee
     FROM user_addresses
     JOIN districts ON user_addresses.district_id = districts.id
     WHERE user_addresses.id = '$address_id' AND user_addresses.user_id = '$user_id' AND user_addresses.is_deleted = 0";
@@ -48,7 +48,7 @@ if (isset($_GET['address_id'])) {
     $dataAddress = mysqli_fetch_assoc($s);
 } else {
     // fetching alamat default
-    $qAlamat = "SELECT user_addresses.id AS address_id, user_addresses.user_id, user_addresses.city, user_addresses.fullname, user_addresses.full_address, user_addresses.postal_code, user_addresses.phone_number, user_addresses.is_default, districts.id AS district_id, districts.district, districts.fee
+    $qAlamat = "SELECT user_addresses.id AS address_id, user_addresses.user_id, user_addresses.city, user_addresses.fullname, user_addresses.full_address, user_addresses.phone_number, user_addresses.is_default, districts.id AS district_id, districts.district, districts.fee
     FROM user_addresses
     JOIN districts ON user_addresses.district_id = districts.id
     WHERE user_addresses.user_id = '$user_id' AND user_addresses.is_deleted = 0 AND user_addresses.is_default = 1 ";
@@ -126,7 +126,6 @@ $qty;
                     <div class="breadcrumb-text">
                         <p>Fresh and Flacky</p>
                         <h1>Checkout</h1>
-                        <?php var_dump($_SESSION['isValidated']) ?>
                     </div>
                 </div>
             </div>
@@ -151,7 +150,7 @@ $qty;
                                         echo '
                                                 <div class="d-flex flex-column">
                                                     <p class="m-0"><span class="fw-bold">' . $dataAddress['fullname'] . '</span> ' . $dataAddress['phone_number'] . '</p>
-                                                    <p>' . $dataAddress['full_address'] . ' , '.$dataAddress['district'].', ' . $dataAddress['city'] . ' , ' . $dataAddress['postal_code'] . '</p>
+                                                    <p>' . $dataAddress['full_address'] . ' , '.$dataAddress['district'].', ' . $dataAddress['city'] . '</p>
                                                 </div>';
 
                                         if ($allAddress->num_rows > 1) {

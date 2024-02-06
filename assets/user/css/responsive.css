@@ -40,7 +40,27 @@
 /* Tablet Layout: 768px. */
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   /* navbar */
+  .item-cart {
+    bottom: 20px;
+    left: 42px;
+    right: 0;
+    font-size: 0.75rem;
+    padding: 4px;
+    text-align: center;
+    width: 18px;
+  }
 
+  .dot-notif {
+    width: 2px;
+    padding: 10px;
+    bottom: 20px;
+    right: 0;
+    left: 38px;
+  }
+
+  .notif-info {
+    left: 0;
+  }
   /* navbar */
 
   .hero-text h1 {
@@ -599,9 +619,46 @@
     grid-column-start: 1;
     grid-column-end: 4;
   }
+
+  /* navbar */
+
+  .item-cart {
+    bottom: 20px;
+    left: 28px;
+    right: 0;
+    font-size: 0.75rem;
+    padding: 4px;
+    text-align: center;
+    width: 18px;
+  }
+
+  .dot-notif {
+    width: 2px;
+    padding: 8px;
+    bottom: 22px;
+    right: 0;
+    left: 29px;
+  }
+
+  .notif-info {
+    left: 0;
+  }
+
+  /* navbar */
+
 }
 /* Wide Mobile Layout: 480px. */
 @media only screen and (min-width: 480px) and (max-width: 767px) {
+  .item-cart {
+    bottom: 20px;
+    left: 30px;
+    right: 0;
+    font-size: 0.75rem;
+    padding: 4px;
+    text-align: center;
+    width: 18px;
+  }
+
   .hero-area div.hero-form {
     margin: 0 auto;
     right: auto;

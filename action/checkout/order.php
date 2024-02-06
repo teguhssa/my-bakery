@@ -19,7 +19,7 @@ if (isset($_POST['placeOrder'])) {
     $total_payment = $_POST['total_payment'];
     $createdAt = date('Y-m-d H:i:s');
     $receipt_img = $_FILES['receipt-file']['name'];
-    $status = false;
+    $status = false; 
 
     if ($receipt_img !== "") {
         // validation receipt
@@ -44,9 +44,11 @@ if (isset($_POST['placeOrder'])) {
             exit;
         }
 
+        $no_order = date('YmdHis') . '-' . $user_id;
+
 
         // insert to order
-        $sql = "INSERT INTO orders (user_id, address_id, created_at) VALUE ('$user_id', '$address_id', '$createdAt') ";
+        $sql = "INSERT INTO orders (no_order, user_id, address_id, created_at) VALUE ('$no_order', '$user_id', '$address_id', '$createdAt') ";
         $res = mysqli_query($conn, $sql);
         $order_id = mysqli_insert_id($conn);
 

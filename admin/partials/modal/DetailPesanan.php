@@ -19,7 +19,6 @@
                             <p class="mb-0">Username : <span class="fw-bold" id="info-username"></span></p>
                             <p class="mb-0">Alamat : <span class="fw-bold"  id="info-alamat"></span></p>
                             <p class="mb-0">Kota : <span class="fw-bold" id="info-kota"></span></p>
-                            <p class="mb-0">Kode POS : <span class="fw-bold" id="info-kode-pos"></span></p>
                             <p class="mb-0">No Hp : <span class="fw-bold" id="info-nomor-hp"></span></p>
                         </div>
                         <div class="mb-3">

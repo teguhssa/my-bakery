@@ -32,12 +32,13 @@ bakeries.bakery_img,
 order_detail.qty,
 order_detail.total_price,
 orders.id AS order_id,
+orders.no_order,
 orders.status_order,
 orders.created_at
 FROM bakeries
 JOIN order_detail ON bakeries.id = order_detail.bakery_id
 JOIN orders ON order_detail.order_id = orders.id
-WHERE orders.user_id = '$user_id'
+WHERE orders.no_order <> '' AND orders.user_id = '$user_id'
 ORDER BY orders.created_at DESC;";
 $res = mysqli_query($conn, $qOrder);
 
@@ -193,7 +194,7 @@ while ($row = mysqli_fetch_assoc($resultDistrict)) {
                                                                 <div class="address-info d-flex flex-column gap-2 mb-3">
                                                                     <p class="m-0">' . $row['phone_number'] . '</p>
                                                                     <p class="m-0">' . $row['city'] . '</p>
-                                                                    <p class="m-0">'. $row['district'] .'</p>
+                                                                    <p class="m-0">' . $row['district'] . '</p>
                                                                     <p class="m-0">' . $row['full_address'] . '</p>
                                                                     <div class="btnAddres d-flex align-items-center gap-2">';
                                                 if (!$row['is_default']) {
@@ -233,6 +234,7 @@ while ($row = mysqli_fetch_assoc($resultDistrict)) {
                                             echo '
                                             <div class="card mb-3">
                                                 <div class="card-body">
+                                                 <p class="mb-0">No Order, ' . $dataOrder['no_order'] . '</p>
                                                     <div class="card-title d-flex align-items-center gap-2">
                                                         <p class="m-0 fw-bold">' . $orderDate . '</p>
                                                         <div class="badge bg-success">' . $dataOrder['status_order'] . '</div>
@@ -362,7 +364,7 @@ while ($row = mysqli_fetch_assoc($resultDistrict)) {
                     method: "post",
                     dataType: "json",
                     success: function(res) {
-                    
+
                         const {
                             data
                         } = res

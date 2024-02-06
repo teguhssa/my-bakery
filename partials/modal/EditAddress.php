@@ -28,9 +28,6 @@
                          </select>
                      </div>
                      <div class="mb-3">
-                         <input type="text" name="postal_code_edit" id="postal_code_edit" class="form-control p-3" placeholder="Your Postal code..." required />
-                     </div>
-                     <div class="mb-3">
                          <textarea name="full_address_edit" id="full_address_edit" cols="20" rows="10" class="form-control" required></textarea>
                      </div>
                      <input type="hidden" name="edit_id" id="edit_id">

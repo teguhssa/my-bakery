@@ -1,4 +1,5 @@
 <?php
+session_start();
 // import koneksi untuk ke databse
 include_once('config/index.php');
 // impoer helper function
@@ -7,6 +8,12 @@ include_once('helper/index.php');
 // fetching data dari database
 $sql = "SELECT * FROM `bakeries` WHERE is_deleted = 0 ORDER BY created_at DESC LIMIT 3 ";
 $result = mysqli_query($conn, $sql);
+
+$dataProduct = array();
+
+while ($data = mysqli_fetch_assoc($result)) {
+	$dataProduct[] = $data;
+}
 
 ?>
 
@@ -61,10 +68,10 @@ $result = mysqli_query($conn, $sql);
 				<div class="col-lg-9 offset-lg-2 text-center">
 					<div class="hero-text">
 						<div class="hero-text-tablecell">
-							<p class="subtitle">Fresh & Flacky</p>
-							<h1>Fresh Bread from oven</h1>
+							<p class="subtitle"></p>
+							<h1>Roti dari Kami</h1>
 							<div class="hero-btns">
-								<a href="all-bread.php" class="boxed-btn">Bread Collection</a>
+								<a href="all-bread.php" class="boxed-btn">Koleksi Roti</a>
 							</div>
 						</div>
 					</div>
@@ -78,15 +85,15 @@ $result = mysqli_query($conn, $sql);
 	<div class="list-section pt-80 pb-80">
 		<div class="container">
 
-			<div class="row">
+		<div class="row">
 				<div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
 					<div class="list-box d-flex align-items-center">
 						<div class="list-icon">
 							<i class="fas fa-shipping-fast"></i>
 						</div>
 						<div class="content">
-							<h3>Free Shipping</h3>
-							<p>When order over $75</p>
+							<h3>bebas biaya kirim</h3>
+							<p>Ketika memesan lebih dari 70 produk</p>
 						</div>
 					</div>
 				</div>
@@ -96,8 +103,8 @@ $result = mysqli_query($conn, $sql);
 							<i class="fas fa-phone-volume"></i>
 						</div>
 						<div class="content">
-							<h3>24/7 Support</h3>
-							<p>Get support all day</p>
+							<h3>Dukungan 24/7</h3>
+							<p>Dapatkan dukungan sepanjang hari</p>
 						</div>
 					</div>
 				</div>
@@ -107,8 +114,8 @@ $result = mysqli_query($conn, $sql);
 							<i class="fas fa-sync"></i>
 						</div>
 						<div class="content">
-							<h3>Refund</h3>
-							<p>Get refund within 3 days!</p>
+							<h3>Pengembalian dana</h3>
+							<p>Dapatkan pengembalian dana dalam 3 hari!</p>
 						</div>
 					</div>
 				</div>
@@ -124,16 +131,16 @@ $result = mysqli_query($conn, $sql);
 			<div class="row">
 				<div class="col-lg-8 offset-lg-2 text-center">
 					<div class="section-title">
-						<h3><span class="orange-text">Our</span> Products</h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, fuga quas itaque eveniet beatae optio.</p>
+					<h3><span class="orange-text">Produk</span> Kami</h3>
 					</div>
 				</div>
 			</div>
 
 			<div class="row">
 				<?php
-				while ($data = mysqli_fetch_assoc($result)) {
-					echo '<div class="col-lg-4 col-md-6 text-center">
+				foreach ($dataProduct as $data) {
+					echo '
+					<div class="col-lg-4 col-md-6 text-center">
 								<div class="single-product-item">
 									<div class="product-image">
 										<a href="bread.php?id=' . $data['id'] . '"><img src="assets/upload/' . $data['bakery_img'] . '" alt="product thumbnail"></a>
@@ -142,7 +149,8 @@ $result = mysqli_query($conn, $sql);
 									<h3>' . $data['bakery_name'] . '</h3>
 									<p class="product-price">' . rupiah($data['price']) . '</p>
 								</div>
-							</div>';
+							</div>
+					';
 				}
 				?>
 			</div>
@@ -161,11 +169,12 @@ $result = mysqli_query($conn, $sql);
 				</div>
 				<div class="col-lg-6 col-md-12">
 					<div class="abt-text">
-						<p class="top-sub">Since Year 1999</p>
-						<h2>We are <span class="orange-text">My Bread</span></h2>
-						<p>Etiam vulputate ut augue vel sodales. In sollicitudin neque et massa porttitor vestibulum ac vel nisi. Vestibulum placerat eget dolor sit amet posuere. In ut dolor aliquet, aliquet sapien sed, interdum velit. Nam eu molestie lorem.</p>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente facilis illo repellat veritatis minus, et labore minima mollitia qui ducimus.</p>
-						<a href="about.html" class="boxed-btn mt-4">know more</a>
+					<h2><span class="orange-text">Roti Saya</span></h2>
+						<p>Roti adalah makanan berbahan dasar utama tepung terigu dan air, yang difermentasikan dengan
+							ragi, tetapi ada juga yang tidak menggunakan ragi. </p>
+						<p>Namun dengan kemajuan teknologi, manusia
+							membuat roti diolah dengan berbagai bahan seperti garam, minyak, mentega, ataupun telur
+							untuk menambahkan kadar protein di dalamnya sehingga didapat tekstur dan rasa tertentu.</p>
 					</div>
 				</div>
 			</div>

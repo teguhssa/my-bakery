@@ -1,4 +1,5 @@
 <?php
+session_start();
 // import koneksi untuk ke databse
 include_once('config/index.php');
 // import helper function
@@ -21,8 +22,13 @@ $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
 $offset = ($current_page - 1) * $items_per_page;
 
 // data dengan batas halaman
-$sql = "SELECT * FROM `bakeries` WHERE is_deleted = 0 ORDER BY created_at DESC LIMIT $offset, $items_per_page";
+$sql = "SELECT * FROM bakeries WHERE is_deleted = 0 ORDER BY created_at DESC LIMIT $offset, $items_per_page";
 $result = mysqli_query($conn, $sql);
+$dataProduct = array();
+
+while ($data = mysqli_fetch_assoc($result)) {
+    $dataProduct[] = $data;
+}
 
 ?>
 <!DOCTYPE html>
@@ -102,11 +108,12 @@ $result = mysqli_query($conn, $sql);
             </div>
 
             <div class="row product-lists">
+
                 <?php
                 $row_count = mysqli_num_rows($result);
 
                 if ($row_count > 0) {
-                    while ($data = mysqli_fetch_assoc($result)) {
+                    foreach ($dataProduct as $data) {
                         echo '
                             <div class="col-lg-4 col-md-6 text-center">
                                 <div class="single-product-item">
@@ -139,7 +146,6 @@ $result = mysqli_query($conn, $sql);
                             for ($page = 1; $page <= $total_pages; $page++) {
                                 echo '<li><a ' . ($page == $current_page ? 'class="active text-white"' : '') . ' href="?page=' . $page . '">' . $page . '</a></li>';
                             }
-
                             ?>
                         </ul>
                     </div>

@@ -31,9 +31,6 @@
                          </select>
                      </div>
                      <div class="mb-3">
-                         <input type="number" name="postal_code" id="postal_code" class="form-control" placeholder="Your Postal code..." required />
-                     </div>
-                     <div class="mb-3">
                          <textarea name="full_address" id="full_address" cols="20" rows="10" class="form-control" required></textarea>
                      </div>
                      <button class="btnAddAddress" name="btnAddress">Save</button>

@@ -36,7 +36,7 @@ $qJumlahRoti = mysqli_query($conn, "SELECT * FROM bakeries WHERE is_deleted = '0
 $jumlahRoti = $qJumlahRoti->num_rows;
 
 // mendapatkan pesanan aktif
-$qPesananAktif = "SELECT orders.created_at AS order_time, users.username, orders.status_order
+$qPesananAktif = "SELECT orders.no_order, orders.created_at AS order_time, users.username, orders.status_order
 FROM orders
 JOIN users ON orders.user_id = users.id
 WHERE orders.status_order <> 'done' ORDER BY order_time DESC";
@@ -191,6 +191,7 @@ foreach($dataRating as $rating) {
                             <table id="tabelPesananAktif">
                                 <thead>
                                     <tr>
+                                        <th>No. Order</th>
                                         <th>Waktu Order</th>
                                         <th>Username</th>
                                         <th>Status Order</th>
@@ -201,6 +202,7 @@ foreach($dataRating as $rating) {
                                     <?php
                                         while($row = mysqli_fetch_assoc($r)) {
                                             echo "<tr>";
+                                            echo "<td>".$row['no_order']."</td>";
                                             echo "<td>".$row['order_time']."</td>";
                                             echo "<td>".$row['username']."</td>";
                                             echo "<td><div class='badge bg-success'>".$row['status_order']."</div></td>";
