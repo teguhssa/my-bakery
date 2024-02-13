@@ -15,6 +15,7 @@ if (isset($_POST['btnUpdateRoti'])) {
     // tangkap value
     $id = $_POST['id'];
     $nama_roti = $_POST['nama_roti'];
+    $category_id = $_POST['kategori_roti'];
     $harga_roti = $_POST['harga_roti'];
     $deskripsi = $_POST['deskripsi'];
     $stock = $_POST['stock'];
@@ -76,7 +77,7 @@ if (isset($_POST['btnUpdateRoti'])) {
             }
         }
     } else {
-        $sql = "UPDATE bakeries SET bakery_name = '$nama_roti', description = '$deskripsi', price = '$harga_roti', stock = '$stock', modified_at = '$modifiedAt' WHERE id = '$id' ";
+        $sql = "UPDATE bakeries SET category_id = '$category_id', bakery_name = '$nama_roti', description = '$deskripsi', price = '$harga_roti', stock = '$stock', modified_at = '$modifiedAt' WHERE id = '$id' ";
         $result = mysqli_query($conn, $sql);
 
         if ($result) {

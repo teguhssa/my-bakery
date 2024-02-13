@@ -29,6 +29,7 @@ $res = mysqli_query($conn, $sql);
 
 // menampung id alamat saat ini
 $dataAddress;
+$isDisabled = false;
 
 // fetch semua alamat untuk modal
 $qAddress = "SELECT user_addresses.id AS address_id, user_addresses.user_id, user_addresses.city, user_addresses.fullname, user_addresses.full_address, user_addresses.phone_number, user_addresses.is_default, districts.id AS district_id, districts.district
@@ -61,8 +62,13 @@ if (isset($_GET['address_id'])) {
 $qTotalPrice = "SELECT SUM(total_price) as total FROM carts WHERE is_complete = 0 AND is_deleted = 0 AND user_id = '$user_id' ";
 $r = mysqli_query($conn, $qTotalPrice);
 
+$total_payment = 0;
 $subtotal = mysqli_fetch_assoc($r);
-$total_payment = $subtotal['total'] + $dataAddress['fee'] + 3000;
+if (!empty($dataAddress)) {
+    $total_payment = $subtotal['total'] + $dataAddress['fee'] + 3000;
+} else {
+    $isDisabled = true;
+}
 
 // menampung id yang akan di kirim untuk checkout
 $cart_id;
@@ -150,7 +156,7 @@ $qty;
                                         echo '
                                                 <div class="d-flex flex-column">
                                                     <p class="m-0"><span class="fw-bold">' . $dataAddress['fullname'] . '</span> ' . $dataAddress['phone_number'] . '</p>
-                                                    <p>' . $dataAddress['full_address'] . ' , '.$dataAddress['district'].', ' . $dataAddress['city'] . '</p>
+                                                    <p>' . $dataAddress['full_address'] . ' , ' . $dataAddress['district'] . ', ' . $dataAddress['city'] . '</p>
                                                 </div>';
 
                                         if ($allAddress->num_rows > 1) {
@@ -226,13 +232,13 @@ $qty;
                     <h5>Subtotal:</h5>
                     <p><?php echo rupiah($subtotal['total']) ?></p>
                     <h5>Total Shipping:</h5>
-                    <p><?php echo rupiah($dataAddress['fee']) ?></p>
+                    <p><?php echo !empty($dataAddress) ? rupiah($dataAddress['fee']) : 0 ?></p>
                     <h5>Service Fee:</h5>
                     <p>Rp. 3000</p>
                     <h5>Total Payment: </h5>
                     <p class="total-payment"><?php echo rupiah($total_payment) ?></p>
                     <div class="button-payment-wrapper">
-                        <button class="btnPlaceOrder" type="button" data-bs-toggle="modal" data-bs-target="#modalPayOrder">Place order</button>
+                        <button class="btnPlaceOrder <?php echo $isDisabled ? 'd-none': '' ?>" type="button" data-bs-toggle="modal" data-bs-target="#modalPayOrder">Place order</button>
                     </div>
                 </div>
             </div>
@@ -323,13 +329,12 @@ $qty;
             wrapper.classList.remove('d-none')
         })
 
-        const form =document.querySelector("#form-payment")
+        const form = document.querySelector("#form-payment")
         const modal = document.querySelector('#modalPayOrder')
         modal.addEventListener('hidden.bs.modal', () => {
             wrapper.classList.add('d-none')
             form.reset()
         })
-
     </script>
 
 </body>

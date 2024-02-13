@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 17, 2024 at 05:39 AM
+-- Generation Time: Feb 12, 2024 at 07:41 PM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -29,6 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `bakeries` (
   `id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL,
   `bakery_name` varchar(255) NOT NULL,
   `bakery_img` varchar(255) NOT NULL,
   `description` text NOT NULL,
@@ -39,18 +40,19 @@ CREATE TABLE `bakeries` (
   `is_deleted` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `bakeries`
+-- Table structure for table `bakery_category`
 --
 
-INSERT INTO `bakeries` (`id`, `bakery_name`, `bakery_img`, `description`, `price`, `stock`, `created_at`, `modified_at`, `is_deleted`) VALUES
-(1, 'donat', 'upload-20231218141530.jpeg', 'kuasong from perancis', 50000, 0, '2023-12-06 04:28:33', '2023-12-19 13:26:26', 1),
-(2, 'Maccaron', 'upload-20231206042914.jpg', 'Maccaron from maroko', 100000, 0, '2023-12-06 04:29:14', '2023-12-14 06:38:18', 1),
-(3, 'Just Bread', 'upload-20231206042936.jpg', 'Just ordinary bread', 10000, 0, '2023-12-06 04:29:36', '2023-12-19 13:38:44', 1),
-(4, 'donat', 'upload-20240107120201.jpeg', 'donat', 10000, 1, '2024-01-07 12:02:01', '2024-01-08 08:48:51', 0),
-(5, 'kuasong', 'upload-20240107120316.jpeg', 'dsadasdas', 12000, 3, '2024-01-07 12:03:16', '2024-01-08 08:52:17', 0),
-(6, 'macaron', 'upload-20240108085049.jpg', 'very crunchy', 12000, 0, '2024-01-08 08:50:49', '2024-01-08 08:51:06', 0),
-(7, 'roti prancis', 'upload-20240108085143.jpg', 'random string', 10000, 6, '2024-01-08 08:51:43', NULL, 0);
+CREATE TABLE `bakery_category` (
+  `id` int(11) NOT NULL,
+  `category_name` varchar(100) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `is_deleted` tinyint(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -70,53 +72,6 @@ CREATE TABLE `carts` (
   `is_deleted` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `carts`
---
-
-INSERT INTO `carts` (`id`, `user_id`, `bakery_id`, `qty`, `total_price`, `created_at`, `modified_at`, `is_complete`, `is_deleted`) VALUES
-(1, 8, 2, 2, 240000, '2023-12-10 13:36:57', '2023-12-12 11:31:49', 1, 0),
-(2, 8, 4, 2, 240000, '2023-12-10 13:41:42', '2024-01-11 08:55:28', 1, 1),
-(3, 7, 3, 1, 10000, '2023-12-11 16:45:13', '2023-12-19 13:42:20', 1, 1),
-(4, 7, 2, 2, 240000, '2023-12-11 16:52:18', '2023-12-12 11:31:49', 1, 1),
-(5, 7, 2, 1, 120000, '2023-12-12 10:25:21', '2023-12-12 11:31:49', 1, 1),
-(6, 7, 3, 1, 10000, '2023-12-12 10:25:28', '2023-12-19 13:42:20', 1, 1),
-(7, 7, 2, 2, 240000, '2023-12-12 13:22:02', NULL, 1, 0),
-(8, 7, 3, 1, 10000, '2023-12-12 13:22:17', '2023-12-19 13:42:20', 1, 1),
-(9, 8, 1, 3, 150000, '2023-12-13 08:33:49', '2023-12-19 13:16:13', 1, 0),
-(10, 9, 2, 1, 120000, '2023-12-14 06:05:28', NULL, 1, 0),
-(11, 9, 1, 3, 150000, '2023-12-14 06:20:21', '2023-12-19 13:16:13', 1, 0),
-(12, 9, 1, 3, 150000, '2023-12-14 14:55:51', '2023-12-19 13:16:13', 1, 0),
-(13, 9, 2, 1, 100000, '2023-12-14 14:56:00', NULL, 1, 0),
-(14, 9, 3, 1, 10000, '2023-12-14 15:02:25', '2023-12-19 13:42:20', 1, 1),
-(15, 9, 2, 1, 100000, '2023-12-14 15:02:33', NULL, 1, 0),
-(16, 9, 2, 1, 100000, '2023-12-19 13:04:17', NULL, 1, 0),
-(17, 9, 1, 3, 150000, '2023-12-19 13:15:58', '2023-12-19 13:16:13', 1, 0),
-(18, 9, 3, 1, 10000, '2023-12-19 13:36:31', '2023-12-19 13:42:20', 0, 1),
-(19, 9, 3, 1, 20000, '2023-12-19 13:38:30', '2023-12-19 13:42:20', 0, 1),
-(20, 9, 3, 1, 10000, '2023-12-19 13:42:32', NULL, 0, 0),
-(21, 10, 5, 4, 48000, '2024-01-07 17:13:56', NULL, 1, 0),
-(22, 10, 4, 4, 48000, '2024-01-07 17:14:08', '2024-01-11 08:55:28', 1, 1),
-(23, 10, 4, 4, 48000, '2024-01-07 17:54:25', '2024-01-11 08:55:28', 1, 1),
-(24, 10, 7, 4, 48000, '2024-01-08 08:52:25', NULL, 1, 0),
-(25, 10, 6, 2, 24000, '2024-01-08 08:52:38', '2024-01-16 16:24:55', 1, 1),
-(26, 10, 4, 4, 48000, '2024-01-08 08:52:50', '2024-01-11 08:55:28', 1, 1),
-(27, 10, 6, 2, 24000, '2024-01-08 11:12:21', '2024-01-16 16:24:55', 1, 1),
-(28, 10, 4, 4, 48000, '2024-01-11 06:23:07', '2024-01-11 08:55:28', 1, 1),
-(29, 10, 4, 4, 48000, '2024-01-11 09:02:00', NULL, 1, 0),
-(30, 10, 6, 2, 24000, '2024-01-12 08:31:23', '2024-01-16 16:24:55', 1, 1),
-(31, 10, 7, 4, 48000, '2024-01-12 08:51:27', NULL, 1, 0),
-(32, 10, 6, 2, 24000, '2024-01-12 10:40:47', '2024-01-16 16:24:55', 1, 1),
-(33, 10, 6, 2, 24000, '2024-01-14 12:44:16', '2024-01-16 16:24:55', 1, 1),
-(34, 10, 7, 4, 48000, '2024-01-14 12:44:25', NULL, 1, 0),
-(35, 10, 6, 2, 24000, '2024-01-14 13:34:35', '2024-01-16 16:24:55', 1, 1),
-(36, 10, 6, 2, 24000, '2024-01-15 14:32:51', '2024-01-16 16:24:55', 1, 1),
-(37, 10, 6, 2, 24000, '2024-01-15 14:34:49', '2024-01-16 16:24:55', 1, 1),
-(38, 10, 6, 2, 24000, '2024-01-15 14:37:36', '2024-01-16 16:24:55', 1, 0),
-(39, 10, 7, 1, 10000, '2024-01-16 09:35:46', NULL, 1, 0),
-(40, 10, 7, 1, 10000, '2024-01-16 18:30:09', NULL, 1, 0),
-(41, 10, 5, 1, 12000, '2024-01-17 04:09:00', NULL, 1, 0);
-
 -- --------------------------------------------------------
 
 --
@@ -134,46 +89,46 @@ CREATE TABLE `districts` (
 --
 
 INSERT INTO `districts` (`id`, `district`, `fee`) VALUES
-(1, 'jonggol', 5000),
-(2, 'cariu', 8000),
-(3, 'tanjung sari', 12400),
+(1, 'jonggol', 32000),
+(2, 'cariu', 54000),
+(3, 'tanjung sari', 84000),
 (4, 'cilengsi', 5000),
-(5, 'sukamakmur', 10200),
-(6, 'cibinong', 8400),
-(7, 'citeureup', 6500),
-(8, 'sukaraja', 12000),
-(9, 'gunung putri', 5000),
-(10, 'babakan madang', 10000),
-(11, 'ciseeng', 11500),
-(12, 'kemang', 14400),
-(13, 'rancabungur', 14000),
-(14, 'gunung sindur', 12600),
-(15, 'bojonggede', 10200),
-(16, 'tajur halang', 15000),
-(17, 'jasinga', 25000),
-(18, 'nanggung', 21000),
-(19, 'ciawi', 13000),
-(20, 'tenjo', 20600),
-(21, 'cigudeg', 18300),
-(22, 'sukajaya', 23600),
-(23, 'leuwiliang', 17300),
-(24, 'leuwisadeng', 18000),
-(25, 'ciampea', 14800),
-(26, 'tenjo laya', 16400),
-(27, 'cibungbulang', 16200),
-(28, 'pamijahan', 17200),
-(29, 'rumpin', 14500),
-(30, 'cisarua', 16000),
-(31, 'ciomas', 13200),
-(32, 'tamansari', 14100),
-(33, 'cijeruk', 14700),
-(34, 'cigombong', 15600),
-(35, 'caringin', 15100),
-(36, 'dramaga', 13500),
-(37, 'megamendung', 14200),
-(38, 'klpanunggal', 5000),
-(39, 'parung panjang', 16700),
-(40, 'parung', 10300);
+(5, 'sukamakmur', 68000),
+(6, 'cibinong', 48000),
+(7, 'citeureup', 44000),
+(8, 'sukaraja', 80000),
+(9, 'gunung putri', 18000),
+(10, 'babakan madang', 68000),
+(11, 'ciseeng', 112000),
+(12, 'kemang', 100000),
+(13, 'rancabungur', 92000),
+(14, 'gunung sindur', 96000),
+(15, 'bojonggede', 66000),
+(16, 'tajur halang', 100000),
+(17, 'jasinga', 164000),
+(18, 'nanggung', 138000),
+(19, 'ciawi', 86000),
+(20, 'tenjo', 138000),
+(21, 'cigudeg', 122000),
+(22, 'sukajaya', 158000),
+(23, 'leuwiliang', 116000),
+(24, 'leuwisadeng', 120000),
+(25, 'ciampea', 100000),
+(26, 'tenjo laya', 110000),
+(27, 'cibungbulang', 108000),
+(28, 'pamijahan', 118000),
+(29, 'rumpin', 134000),
+(30, 'cisarua', 106000),
+(31, 'ciomas', 88000),
+(32, 'tamansari', 94000),
+(33, 'cijeruk', 98000),
+(34, 'cigombong', 104000),
+(35, 'caringin', 102000),
+(36, 'dramaga', 90000),
+(37, 'megamendung', 96000),
+(38, 'klpanunggal', 16000),
+(39, 'parung panjang', 112000),
+(40, 'parung', 70000);
 
 -- --------------------------------------------------------
 
@@ -183,38 +138,12 @@ INSERT INTO `districts` (`id`, `district`, `fee`) VALUES
 
 CREATE TABLE `orders` (
   `id` int(11) NOT NULL,
+  `no_order` varchar(100) NOT NULL,
   `user_id` int(11) NOT NULL,
   `address_id` int(11) NOT NULL,
   `status_order` enum('cancel','waiting for approve','ready to ship','shipping','done') NOT NULL DEFAULT 'waiting for approve',
   `created_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `orders`
---
-
-INSERT INTO `orders` (`id`, `user_id`, `address_id`, `status_order`, `created_at`) VALUES
-(1, 7, 1, 'done', '2023-12-12 16:58:58'),
-(2, 8, 7, 'done', '2023-12-13 10:21:44'),
-(3, 9, 8, 'done', '2023-12-14 06:37:10'),
-(4, 9, 8, 'done', '2023-12-14 14:56:11'),
-(5, 9, 8, 'done', '2023-12-14 15:02:44'),
-(6, 9, 8, 'done', '2023-12-19 13:04:27'),
-(7, 9, 8, 'done', '2023-12-19 13:16:28'),
-(8, 10, 10, 'done', '2024-01-07 17:14:42'),
-(9, 10, 10, 'done', '2024-01-07 17:54:34'),
-(10, 10, 10, 'done', '2024-01-08 08:53:22'),
-(11, 10, 10, 'done', '2024-01-08 11:12:57'),
-(12, 10, 10, 'waiting for approve', '2024-01-12 08:30:00'),
-(13, 10, 10, 'waiting for approve', '2024-01-12 08:31:49'),
-(14, 10, 10, 'ready to ship', '2024-01-12 08:51:51'),
-(15, 10, 10, 'ready to ship', '2024-01-12 08:52:09'),
-(16, 10, 10, 'done', '2024-01-12 10:41:03'),
-(17, 10, 10, 'done', '2024-01-14 12:44:42'),
-(18, 10, 10, 'done', '2024-01-14 13:34:54'),
-(19, 10, 10, 'ready to ship', '2024-01-16 16:45:06'),
-(20, 10, 12, 'waiting for approve', '2024-01-16 19:11:08'),
-(21, 10, 11, 'done', '2024-01-17 04:09:19');
 
 -- --------------------------------------------------------
 
@@ -233,42 +162,6 @@ CREATE TABLE `order_detail` (
   `modified_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `order_detail`
---
-
-INSERT INTO `order_detail` (`id`, `order_id`, `bakery_id`, `qty`, `subtotal`, `total_price`, `created_at`, `modified_at`) VALUES
-(1, 1, 2, 2, 250000, 265000, '2023-12-12 16:58:58', NULL),
-(2, 1, 3, 1, 250000, 265000, '2023-12-12 16:58:58', NULL),
-(3, 2, 1, 2, 100000, 115000, '2023-12-13 10:21:44', NULL),
-(4, 3, 2, 1, 120000, 185000, '2023-12-14 06:37:10', NULL),
-(5, 3, 1, 1, 50000, 185000, '2023-12-14 06:37:10', NULL),
-(6, 4, 1, 1, 50000, 165000, '2023-12-14 14:56:11', NULL),
-(7, 4, 2, 1, 100000, 165000, '2023-12-14 14:56:11', NULL),
-(8, 5, 3, 1, 10000, 125000, '2023-12-14 15:02:44', NULL),
-(9, 5, 2, 1, 100000, 125000, '2023-12-14 15:02:44', NULL),
-(10, 6, 2, 1, 100000, 115000, '2023-12-19 13:04:27', NULL),
-(11, 7, 1, 3, 50000, 165000, '2023-12-19 13:16:28', NULL),
-(12, 8, 5, 1, 1212, 26212, '2024-01-07 17:14:42', NULL),
-(13, 8, 4, 1, 10000, 26212, '2024-01-07 17:14:42', NULL),
-(14, 9, 4, 1, 10000, 25000, '2024-01-07 17:54:34', NULL),
-(15, 10, 7, 1, 10000, 47000, '2024-01-08 08:53:22', NULL),
-(16, 10, 6, 1, 12000, 47000, '2024-01-08 08:53:22', NULL),
-(17, 10, 4, 1, 10000, 47000, '2024-01-08 08:53:22', NULL),
-(18, 11, 6, 2, 12000, 39000, '2024-01-08 11:12:57', NULL),
-(19, 12, 4, 1, 10000, 25000, '2024-01-12 08:30:00', NULL),
-(20, 13, 6, 1, 12000, 27000, '2024-01-12 08:31:49', NULL),
-(21, 14, 7, 1, 10000, 25000, '2024-01-12 08:51:51', NULL),
-(22, 15, 7, 1, 10000, 25000, '2024-01-12 08:52:09', NULL),
-(23, 16, 6, 1, 12000, 27000, '2024-01-12 10:41:03', NULL),
-(24, 17, 6, 2, 12000, 59000, '2024-01-14 12:44:42', NULL),
-(25, 17, 7, 2, 10000, 59000, '2024-01-14 12:44:42', NULL),
-(26, 18, 6, 1, 12000, 27000, '2024-01-14 13:34:54', NULL),
-(27, 19, 6, 2, 12000, 49000, '2024-01-16 16:45:06', NULL),
-(28, 19, 7, 1, 10000, 49000, '2024-01-16 16:45:06', NULL),
-(29, 20, 7, 1, 10000, 21400, '2024-01-16 19:11:08', NULL),
-(30, 21, 5, 1, 12000, 25200, '2024-01-17 04:09:19', NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -284,22 +177,6 @@ CREATE TABLE `receipt` (
   `isApprove` tinyint(1) NOT NULL DEFAULT 0,
   `approve_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `receipt`
---
-
-INSERT INTO `receipt` (`id`, `order_id`, `user_id`, `payment_img`, `submitted_at`, `isApprove`, `approve_date`) VALUES
-(1, 12, 10, 'receipt-20240112083000.jpg', '2024-01-12 08:30:00', 0, NULL),
-(2, 13, 10, 'receipt-20240112083149.jpg', '2024-01-12 08:31:49', 0, NULL),
-(3, 14, 10, 'receipt-1420240112085151.jpg', '2024-01-12 08:51:51', 0, NULL),
-(4, 15, 10, 'receipt-1520240112085209.jpg', '2024-01-12 08:52:09', 0, NULL),
-(5, 16, 10, 'receipt-1620240112104103.jpg', '2024-01-12 10:41:03', 0, NULL),
-(6, 17, 10, 'receipt-1720240114124442.jpg', '2024-01-14 12:44:42', 1, '2024-01-14 13:35:07'),
-(7, 18, 10, 'receipt-1820240114133454.jpg', '2024-01-14 13:34:54', 1, '2024-01-14 13:36:11'),
-(8, 19, 10, 'receipt-1920240116164506.jpg', '2024-01-16 16:45:06', 1, '2024-01-16 16:45:27'),
-(9, 20, 10, 'receipt-2020240116191108.jpg', '2024-01-16 19:11:08', 0, NULL),
-(10, 21, 10, 'receipt-2120240117040919.jpg', '2024-01-17 04:09:19', 1, '2024-01-17 04:30:02');
 
 -- --------------------------------------------------------
 
@@ -317,15 +194,6 @@ CREATE TABLE `reviews` (
   `created_at` datetime NOT NULL,
   `modified_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `reviews`
---
-
-INSERT INTO `reviews` (`id`, `order_id`, `user_id`, `bakery_id`, `review_description`, `rating`, `created_at`, `modified_at`) VALUES
-(2, 11, 10, 6, 'cruncy', 3, '2024-01-14 08:19:23', NULL),
-(3, 10, 10, 4, 'gulanya banyak mantap', 5, '2024-01-14 09:57:37', NULL),
-(4, 21, 10, 5, 'kurang matang', 2, '2024-01-17 04:32:18', NULL);
 
 -- --------------------------------------------------------
 
@@ -349,15 +217,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `username`, `password`, `role`, `created_at`, `modified_at`) VALUES
-(1, '', 'admin@exp.com', 'admin', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'admin', '2023-12-04 07:28:33', NULL),
-(2, '', 'jhon@exp.com', 'jhon1', '$2y$10$UBfcSx3kIcdg1yXacmyYcewP2kBcgOCR/A0y24yBEmQJ2JX.0bB9i', 'user', '2023-12-07 13:48:09', NULL),
-(3, '', 'teguh@exp.com', 'test', '$2y$10$nO14tXgze5JrCiWWmB/7EeSLPbKiyRMi9RYVGcoW32SewmJx6pPwC', 'user', '2023-12-07 13:48:36', NULL),
-(4, '', 'test@exp.com', 'rara', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'user', '2023-12-07 17:41:38', NULL),
-(5, 'jhon smith', 'jon', 'jon', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'user', '2023-12-08 13:17:36', NULL),
-(7, 'katarina', 'karina@exp.com', 'karina@exp.com', '1a6262506caed6d26e7306efca90800b5a10afda9f9209afac52b01510f28d46', 'user', '2023-12-08 13:23:37', '2023-12-08 18:20:33'),
-(8, '', 'amir@exp.com', 'amir', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'user', '2023-12-10 13:38:12', NULL),
-(9, '', 'kayla@exp.com', 'kayla', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'user', '2023-12-14 06:04:17', NULL),
-(10, 'kai', 'kai@exp.com', 'kai', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'user', '2024-01-07 15:54:37', '2024-01-08 12:44:07');
+(1, 'admin', 'admin@exp.com', 'admin', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'admin', '2024-02-12 18:40:34', NULL);
 
 -- --------------------------------------------------------
 
@@ -381,24 +241,6 @@ CREATE TABLE `user_addresses` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `user_addresses`
---
-
-INSERT INTO `user_addresses` (`id`, `user_id`, `fullname`, `city`, `district_id`, `full_address`, `postal_code`, `phone_number`, `is_default`, `created_at`, `modified_at`, `is_deleted`) VALUES
-(1, 7, 'Karina almahera', 'Bogor', 0, 'jl hayam wuruk', 344324, '081123124', 1, '2023-12-10 07:43:53', '2023-12-10 13:20:15', 0),
-(2, 7, 'jhon smith', 'bogor', 0, 'air mancur bogor', 16960, '82102020', 0, '2023-12-10 07:45:00', '2023-12-10 09:22:34', 0),
-(3, 7, 'Darwin', 'Jakarta', 0, 'jl marthadinata no 10', 9887, '09877689', 0, '2023-12-11 17:42:05', '0000-00-00 00:00:00', 0),
-(4, 8, 'joko sanono', 'Bogor', 0, 'Jalan taruma ledeng barat ciputat', 16630, '09823237', 0, '2023-12-13 09:12:32', '0000-00-00 00:00:00', 1),
-(5, 8, 'KOKO sanoso', 'bogor', 0, 'kp sumedang rt1011 jl cilubang', 18830, '09873823', 1, '2023-12-13 09:19:49', '0000-00-00 00:00:00', 0),
-(6, 8, 'Koko sasono', 'Jakarta', 0, 'jl marthadinata no 2', 12000, '09878732', 0, '2023-12-13 10:10:01', '0000-00-00 00:00:00', 1),
-(7, 8, 'Teguh Satria', 'Bogor', 0, 'kp melayu kecamatan jagakarsa rt 20', 23123213, '232324324', 0, '2023-12-13 10:19:56', '0000-00-00 00:00:00', 0),
-(8, 9, 'Kyla', 'Bogor', 0, 'kp bojong jengkol kecamtatan ciampea', 16630, '09821323', 0, '2023-12-14 06:29:10', '0000-00-00 00:00:00', 0),
-(9, 9, 'Katya elbark', 'Bogor', 0, 'Kp tank desa girimulya', 18660, '09372638', 1, '2023-12-19 12:35:42', '2023-12-19 13:12:47', 0),
-(10, 10, 'Karina almahera', 'Bogor', 0, 'dsasadasdsad', 23232, '45434353', 0, '2024-01-07 17:14:31', '0000-00-00 00:00:00', 0),
-(11, 10, 'lil salman', 'bogor', 15, 'perum ciampea babakan', 193223, '09008320', 1, '2024-01-16 17:46:19', '2024-01-16 18:29:51', 0),
-(12, 10, 'kong nay', 'bogor', 6, 'perum cibinong', 12093, '09883834', 0, '2024-01-16 18:55:36', '0000-00-00 00:00:00', 0);
-
---
 -- Indexes for dumped tables
 --
 
@@ -406,6 +248,12 @@ INSERT INTO `user_addresses` (`id`, `user_id`, `fullname`, `city`, `district_id`
 -- Indexes for table `bakeries`
 --
 ALTER TABLE `bakeries`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `bakery_category`
+--
+ALTER TABLE `bakery_category`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -471,13 +319,19 @@ ALTER TABLE `user_addresses`
 -- AUTO_INCREMENT for table `bakeries`
 --
 ALTER TABLE `bakeries`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `bakery_category`
+--
+ALTER TABLE `bakery_category`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `districts`
@@ -489,37 +343,37 @@ ALTER TABLE `districts`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `order_detail`
 --
 ALTER TABLE `order_detail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `receipt`
 --
 ALTER TABLE `receipt`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `reviews`
 --
 ALTER TABLE `reviews`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `user_addresses`
 --
 ALTER TABLE `user_addresses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables

@@ -12,9 +12,18 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-bread-slice"></i></div>
                     Roti
                 </a>
+                <a class="nav-link" href="./kategori-roti.php">
+                    <div class="sb-nav-link-icon"><i class="fas fa-bread-slice"></i></div>
+                    Kategori roti
+                </a>
                 <a class="nav-link" href="./user.php">
                     <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                     User
+                </a>
+                <div class="sb-sidenav-menu-heading">Laporan</div>
+                <a class="nav-link" href="penjualan.php">
+                    <div class="sb-nav-link-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+                    Penjualan
                 </a>
                 <div class="sb-sidenav-menu-heading">Pesanan</div>
                 <a class="nav-link" href="./pesanan.php">

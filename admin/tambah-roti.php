@@ -8,6 +8,9 @@ if (!isset($_SESSION['user_id_admin'])) {
     exit();
 }
 
+$qGetCategory = "SELECT id, category_name FROM bakery_category WHERE is_deleted = 0 ORDER BY created_at DESC";
+$result = mysqli_query($conn, $qGetCategory);
+
 ?>
 
 <!DOCTYPE html>
@@ -64,6 +67,16 @@ if (!isset($_SESSION['user_id_admin'])) {
                                 <div class="mb-3">
                                     <label for="nama_roti" class="form-label">Nama Roti</label>
                                     <input type="text" name="nama_roti" id="nama_roti" class="form-control" placeholder="Nama Roti..." required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="kategori_roti">Kategori Roti</label>
+                                    <select name="kategori_roti" id="kategori_roti" class="form-select">
+                                        <?php
+                                        while ($data = mysqli_fetch_assoc($result)) {
+                                            echo "<option class='form-control' value=" . $data['id'] . ">" . $data['category_name'] . "</option>";
+                                        }
+                                        ?>
+                                    </select>
                                 </div>
                                 <div class="mb-3">
                                     <label for="harga_roti" class="form-label">Harga Roti</label>

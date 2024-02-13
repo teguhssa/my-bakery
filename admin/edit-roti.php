@@ -8,23 +8,27 @@ if (!isset($_SESSION['user_id_admin'])) {
     exit();
 }
 
-// define('APP_ROOT', dirname(__FILE__));
-
-// menampilkan roti yang sudah dipilih
-
 $id = $_GET['id'];
 
 // fetch roti berdasarkan id
-$sql = "SELECT * FROM bakeries WHERE id = '$id' ";
+$sql = "SELECT b.bakery_name, b.bakery_img, b.description, b.price, b.stock, c.id AS category_id, c.category_name
+FROM bakeries b
+JOIN bakery_category c ON b.category_id = c.id
+WHERE b.id = '$id' ";
 $result = mysqli_query($conn, $sql);
 
-while($row = mysqli_fetch_assoc($result)) {
+while ($row = mysqli_fetch_assoc($result)) {
+    $category_id = $row['category_id'];
     $nama_roti = $row['bakery_name'];
+    $kategory_roti = $row['category_name'];
     $gambar_roti = $row['bakery_img'];
     $deskripsi = $row['description'];
     $harga_roti = $row['price'];
     $stock = $row['stock'];
 }
+
+$qGetCategory = "SELECT id AS category_id, category_name FROM bakery_category WHERE is_deleted = 0 ORDER BY created_at DESC";
+$r = mysqli_query($conn, $qGetCategory);
 
 ?>
 
@@ -84,6 +88,16 @@ while($row = mysqli_fetch_assoc($result)) {
                                     <input type="text" name="nama_roti" id="nama_roti" class="form-control" placeholder="Nama Roti..." value="<?php echo $nama_roti ?>" required>
                                 </div>
                                 <div class="mb-3">
+                                <select name="kategori_roti" id="kategori_roti" class="form-select">
+                                    <?php
+                                    while ($data = mysqli_fetch_assoc($r)) {
+                                        $isSelected = ($data['category_id'] === $category_id) ? 'selected' : '';
+                                        echo '<option class="form-control" value="' . $data['id'] . '" ' . $isSelected . '>' . $data['category_name'] . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                                </div>
+                                <div class="mb-3">
                                     <label for="harga_roti" class="form-label">Harga Roti</label>
                                     <input type="number" name="harga_roti" id="harga_roti" class="form-control" placeholder="Harga Roti..." value="<?php echo $harga_roti ?>" required>
                                 </div>
@@ -99,7 +113,7 @@ while($row = mysqli_fetch_assoc($result)) {
                                     <label for="gambar_roti">Gambar Roti</label>
                                     <input type="file" name="gambar_roti" id="gambar_roti" class="form-control" accept="image/png, image/jpg, image/jpeg">
                                     <div class="thumbnail" id="wrapper_thumbnail">
-                                        <img src="../assets/upload/<?php echo $gambar_roti; ?>"  alt="thumbnail" name="thumbnail" id="thumbnail">
+                                        <img src="../assets/upload/<?php echo $gambar_roti; ?>" alt="thumbnail" name="thumbnail" id="thumbnail">
                                     </div>
                                 </div>
                                 <input type="hidden" value="<?php echo $id ?>" name="id" />

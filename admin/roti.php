@@ -1,5 +1,6 @@
 <?php
 include_once('../config/index.php');
+include_once('../helper/index.php');
 // memulai session
 session_start();
 // validasi user jika tidak mempunyai session
@@ -7,7 +8,6 @@ if (!isset($_SESSION['user_id_admin'])) {
     header('Location: login.php');
     exit();
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -66,6 +66,7 @@ if (!isset($_SESSION['user_id_admin'])) {
                                 <thead>
                                     <tr>
                                         <th>Nama</th>
+                                        <th>Kategori roti</th>
                                         <th>Gambar</th>
                                         <th>Desktripsi</th>
                                         <th>Harga</th>
@@ -76,19 +77,23 @@ if (!isset($_SESSION['user_id_admin'])) {
                                 <tbody>
                                     <?php
 
-                                    $sql = "SELECT * FROM bakeries WHERE is_deleted = 0";
+                                    $sql = "SELECT b.id, b.bakery_name, b.bakery_img, b.description, b.price, b.stock, c.category_name
+                                            FROM bakeries b
+                                            JOIN bakery_category c ON b.category_id = c.id
+                                            WHERE b.is_deleted = 0 ";
                                     $result = mysqli_query($conn, $sql);
 
                                     while ($row = mysqli_fetch_assoc($result)) {
                                         echo "<tr>";
                                         echo "<td>" . $row['bakery_name'] . "</td>";
+                                        echo "<td>" . $row['category_name'] . "</td>";
                                         echo "<td> 
                                         <img src='../assets/upload/" . $row['bakery_img'] . "' alt='kuasong' width='50'>
                                         </td>";
                                         echo "<td>" . $row['description'] . "</td>";
-                                        echo "<td>" . $row['price'] . "</td>";
+                                        echo "<td>" . rupiah($row['price']) . "</td>";
                                         echo "<td>" . $row['stock'] . "</td>";
-                                        echo "<td> <a href='edit-roti.php?id=". $row['id'] ."' class='btn'><i class='fas fa-edit'  style='color: #fde808;'></i></a> | <a href='action/roti/hapus.php?id=" . $row['id'] . "' class='btn' onclick='return confirmHapus()'><i class='fas fa-trash' style='color: #ff0000;'></i></a> </td>";
+                                        echo "<td> <a href='edit-roti.php?id=" . $row['id'] . "' class='btn'><i class='fas fa-edit'  style='color: #fde808;'></i></a> | <a href='action/roti/hapus.php?id=" . $row['id'] . "' class='btn' onclick='return confirmHapus()'><i class='fas fa-trash' style='color: #ff0000;'></i></a> </td>";
                                         echo "</tr>";
                                     }
 

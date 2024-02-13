@@ -42,6 +42,10 @@ JOIN users ON orders.user_id = users.id
 WHERE orders.status_order <> 'done' ORDER BY order_time DESC";
 $r = mysqli_query($conn, $qPesananAktif);
 
+// menghitung user aktif
+$qUser = mysqli_query($conn, "SELECT * FROM users");
+$userAktif = $qUser->num_rows;
+
 $qAvarageReviews = "SELECT * FROM reviews ORDER BY created_at DESC";
 $dataRating = mysqli_query($conn, $qAvarageReviews);
 $avgRating = 0;
@@ -158,7 +162,7 @@ foreach($dataRating as $rating) {
                                         <h5>Jumlah user aktif</h5>
                                         <div class="d-flex align-items-center justify-content-between fs-4 mb-2">
                                             <i class="fas fa-user"></i>
-                                            <p class="mb-0 fw-bold">10</p>
+                                            <p class="mb-0 fw-bold"><?php echo $userAktif ?></p>
                                         </div>
                                         <div class="d-flex align-items-center justify-content-between">
                                             <a class="small text-white stretched-link" href="user.php">Kelola</a>
