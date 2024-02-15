@@ -10,9 +10,10 @@ if (isset($_POST['btnEditKategori']))
 {
     $id = $_POST['id'];
     $categoryName = $_POST['nama_kategori_edit'];
+    $slug = strtolower(str_replace('', '-', $categoryName));
     $updated_at = date('Y-m-d H:i:s');
 
-    $query = "UPDATE bakery_category SET category_name = '$categoryName', updated_at = '$updated_at' WHERE id = '$id' ";
+    $query = "UPDATE bakery_category SET category_name = '$categoryName', slug = '$slug', updated_at = '$updated_at' WHERE id = '$id' ";
     $result = mysqli_query($conn, $query);
 
     if ($result) {

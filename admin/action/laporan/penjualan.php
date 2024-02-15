@@ -50,20 +50,6 @@ function generateReport($dataReports, $filename)
             <td style="border: 1px solid black">' . ($data['amount'] !== "-" ? rupiah($data['amount']) : "-") . '</td>
         </tr>';
     }
-
-
-    // while ($data = mysqli_fetch_assoc($dataReports)) {
-    //     $total += $data['amount'];
-    //     $output .= '
-    //             <tr>
-    //                 <td style="border: 1px solid black">' . $data['order_date'] . '</td>
-    //                 <td style="border: 1px solid black">' . $data['no_order'] . '</td>
-    //                 <td style="border: 1px solid black">' . $data['bakery_name'] . '</td>
-    //                 <td style="border: 1px solid black">' . rupiah($data['price']) . '</td>
-    //                 <td style="border: 1px solid black">' . $data['qty'] . '</td>
-    //                 <td style="border: 1px solid black">' . rupiah($data['amount']) . '</td>
-    //             </tr>';
-    // }
     $output .= '
                     </tbody>
                     <tfoot>

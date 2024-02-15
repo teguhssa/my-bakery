@@ -5,11 +5,24 @@ include_once('config/index.php');
 // import helper function
 include_once('helper/index.php');
 
+$category = "";
+if (isset($_GET['category'])) {
+    $category = $_GET['category'];
+}
+
 // jumlah per halaman
-$items_per_page = 10;
+$items_per_page = 5;
 
 // mendapatkan jumlah total data dari databse
-$total_item_query = "SELECT COUNT(*) AS total FROM bakeries WHERE is_deleted = 0";
+$total_item_query = "SELECT COUNT(*) AS total
+                    FROM bakeries b
+                    JOIN bakery_category c ON c.id = b.category_id
+                    WHERE b.is_deleted = 0";
+
+if (isset($_GET['category'])) {
+    $category = $_GET['category'];
+    $total_item_query .= " AND c.slug = '$category'";
+}
 $total_item_result = mysqli_query($conn, $total_item_query);
 $total_items = mysqli_fetch_assoc($total_item_result)['total'];
 
@@ -22,7 +35,18 @@ $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
 $offset = ($current_page - 1) * $items_per_page;
 
 // data dengan batas halaman
-$sql = "SELECT * FROM bakeries WHERE is_deleted = 0 ORDER BY created_at DESC LIMIT $offset, $items_per_page";
+$sql = "SELECT b.id AS bakery_id, b.bakery_name, b.bakery_img, b.stock, b.description, b.price, c.slug
+        FROM bakeries b
+        JOIN bakery_category c ON c.id = b.category_id
+        WHERE b.is_deleted = 0";
+
+if (isset($_GET['category'])) {
+    $category = $_GET['category'];
+    $sql .= " AND c.slug = '$category'";
+}
+
+$sql .= " ORDER BY b.created_at DESC LIMIT $offset, $items_per_page";
+
 $result = mysqli_query($conn, $sql);
 $dataProduct = array();
 
@@ -94,6 +118,7 @@ while ($data = mysqli_fetch_assoc($result)) {
     </div>
     <!-- end breadcrumb section -->
 
+
     <!-- products -->
     <div class="product-section mt-150 mb-150">
         <div class="container">
@@ -103,6 +128,30 @@ while ($data = mysqli_fetch_assoc($result)) {
                     <div class="section-title text-center">
                         <h3><span class="orange-text">Our</span> Products</h3>
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, fuga quas itaque eveniet beatae optio.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="product-filters">
+                        <ul>
+                            <li><a class="text-dark" href="all-bread.php">All</a></li>
+                            <?php
+                            $qCategry = "SELECT category_name, slug FROM bakery_category WHERE is_deleted = 0 ORDER BY created_at DESC";
+                            $categories = mysqli_query($conn, $qCategry);
+
+                            while ($data = mysqli_fetch_assoc($categories)) {
+                                echo '
+                                <li class="' . ($data['slug'] === $category ? 'active' : '') . '">
+                                    <a class="text-dark " href="all-bread.php?category=' . $data['slug'] . '">
+                                    ' . $data['category_name'] . '
+                                    </a>
+                                </li>
+                            ';
+                            }
+                            ?>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -118,7 +167,7 @@ while ($data = mysqli_fetch_assoc($result)) {
                             <div class="col-lg-4 col-md-6 text-center">
                                 <div class="single-product-item">
                                     <div class="product-image">
-                                        <a href="bread.php?id=' . $data['id'] . '"><img src="assets/upload/' . $data['bakery_img'] . '" alt="product thumbnail"></a>
+                                        <a href="bread.php?id=' . $data['bakery_id'] . '"><img src="assets/upload/' . $data['bakery_img'] . '" alt="product thumbnail"></a>
                                     </div>
                                     <div class="' . ($data['stock'] == 0 ? 'out-of-stock' : '') . '"></div>
                                     <h3>' . $data['bakery_name'] . '</h3>
@@ -144,7 +193,11 @@ while ($data = mysqli_fetch_assoc($result)) {
                         <ul>
                             <?php
                             for ($page = 1; $page <= $total_pages; $page++) {
-                                echo '<li><a ' . ($page == $current_page ? 'class="active text-white"' : '') . ' href="?page=' . $page . '">' . $page . '</a></li>';
+                                if ($category !== "") {
+                                    echo '<li><a ' . ($page == $current_page ? 'class="active text-white"' : '') . ' href="category?=' . $category . '?page=' . $page . '">' . $page . '</a></li>';
+                                } else {
+                                    echo '<li><a ' . ($page == $current_page ? 'class="active text-white"' : '') . ' href="?page=' . $page . '">' . $page . '</a></li>';
+                                }
                             }
                             ?>
                         </ul>
@@ -176,6 +229,7 @@ while ($data = mysqli_fetch_assoc($result)) {
     <script src="assets/user/js/sticker.js"></script>
     <!-- main js -->
     <script src="assets/user/js/main.js"></script>
+
 
 </body>
 
